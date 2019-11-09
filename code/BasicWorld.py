@@ -31,7 +31,7 @@ class BasicWorld(Cell2D):
 
 
 
-    def __init__(self, n=20, m=20, u=0.3, do_mutation = False, do_silent = False):
+    def __init__(self, n=20, m=20, u=0.3, do_mutation = False, do_silent = False, ):
 
         self.array = [[Agent() for _ in range(m)] for _ in range(n)]
 
@@ -48,6 +48,10 @@ class BasicWorld(Cell2D):
                         [1/3, 1/3, 1/3, 1/3, 1/3, 1/3, 1/3],
                         ])
 
+        self.inherent_fitness_increment_prob = 0.001
+        self.inherent_fitness_increment_prob = 0.1
+
+
     def make_cooperate_array(self):
         """
         Makes an n x m array, where an element is 1 if the agent there
@@ -60,11 +64,38 @@ class BasicWorld(Cell2D):
         Makes an n x m array, where each element is that agent's fitness,
         derived from its and others' behaviors and their inherent fitnesses.
         """
-        cooperate_array = self.make_cooperate_array(t)
-        pd_results = np.convolve
+        cooperate_array = self.make_cooperate_array()
+        pd_results = np.correlate(cooperate_array, self.kernel, mode="same")
+        inherent_fitnesses = np.array([[agent.inherent_fitness for agent in row] for row in self.array])
 
+        return pd_results + inherent_fitnesses
+
+    def neighborhood_look(self, loc, fitness_array):
+        pass
 
     def step(self):
+        # make fitness array
+        arr = self.make_fitness_array()
+
+        # determine who conquers whom in the local area
+        # ORIGINAL IMPLEMENTATION:
+        # for "conquering", we look at every cell in a random order
+        # after picking a cell we then look at ONE OF the four "direct" neighbors (cardinal directions)
+        # we compare fitnesses. If our current cell is higher, do nothing.
+        # If our current cell has lower fitness we can be replaced with the other cell
+        for (x,y) in np.ndenumerate(arr).shuffle():
+
+
+
+        # have conquering happen [update matrices/agents] -> mutation at odds mut_chance or whatever
+
+        # Increment random inherent_fitness vars
+        for agent in [agent for agent in self.rows for row in self.array]:
+            if np.random.random < self.inherent_fitness_increment_prob:
+                agent.inherent_fitness += inherent_fitness_increment_amt
+
+
+
         return
 
     def loop(self, t=1):
@@ -92,15 +123,36 @@ class BasicWorld(Cell2D):
 
         return plt.imshow(array, **options)
 
-    def draw(self):
+    def draw(self, frames, interval=None, step=None):
         """
         Gets the current np array state then draws the array
         """
         arr = self.make_cooperate_array()
         self.draw_array(arr)
 
-    def animate(self, t):
-        pass
+    def animate(self, frames, interval=None, step=None):
+        """Animate the automaton.
+
+        frames: number of frames to draw
+        interval: time between frames in seconds
+        iters: number of steps between frames
+        """
+        if step is None:
+            step = self.step
+
+        plt.figure()
+        try:
+            for i in range(frames-1):
+                self.draw()
+                plt.show()
+                if interval:
+                    sleep(interval)
+                step()
+                clear_output(wait=True)
+            self.draw()
+            plt.show()
+        except KeyboardInterrupt:
+            pass
 
 
 
@@ -108,8 +160,8 @@ class BasicWorld(Cell2D):
 
 class Agent():
 
-    def __init__(self, fitness = 1, strategy=Strategy.d, time_to_cooperate = None):
-        self.fitness = fitness
+    def __init__(self,  strategy=Strategy.d, time_to_cooperate = None):
+        self.inherent_fitness = 0
         self.strategy = strategy
         self.time_to_cooperate = time_to_cooperate
 
