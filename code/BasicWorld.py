@@ -84,22 +84,14 @@ class BasicWorld:
         cooperate with them.  Boundary conditions are periodic, i.e. agents at
         the far left play against agents at the far right.
         """
-        # TODO: Simplify using scipy's wrap boundary condition
-        # To simulate periodic boundaries, we pad the array.  This is how much
-        # we have to do.
-        pad_amt = int((len(self.kernel) + 1) / 2)
         coop_array = np.array(
             [
                 [1 if agent.cooperate_p(self.curr_step) else 0 for agent in row]
                 for row in self.array
             ]
         )
-        coop_padded = np.pad(coop_array, pad_amt, mode="wrap")
 
-        # Correlate then cut down.  In theory this could be done in one step
-        # with a different correlation mode, but this is easier to debug.
-        pd_padded = correlate2d(coop_padded, self.kernel, mode="same")
-        pd_results = pd_padded[pad_amt:-pad_amt, pad_amt:-pad_amt]
+        pd_results = correlate2d(coop_array, self.kernel, mode="same", boundary="wrap")
         return pd_results
 
     def make_fitness_array(self):
@@ -198,7 +190,7 @@ class BasicWorld:
         )
         self.draw_array(arr)
 
-    def animate(self, frames, interval=None, step=None):
+    def animate(self, frames, interval=None, skip=0, step=None):
         """Animate the automaton.
 
         frames: number of frames to draw
@@ -218,7 +210,8 @@ class BasicWorld:
                 self.draw()
                 # plt.show(block=False)
                 plt.pause(interval)
-                step()
+                for _ in range(skip + 1):
+                    step()
                 plt.clf()
                 # clear_output(wait=True)
             self.draw()
@@ -259,4 +252,4 @@ if __name__ == "__main__":
     bounds = [7, 7, 13, 13]
     world = BasicWorld(n=100, bounds=bounds)
     # world.step()
-    world.animate(frames=10000)
+    world.animate(frames=10000, skip=5)
