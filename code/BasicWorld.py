@@ -2,8 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from time import sleep
 from IPython.display import clear_output
-from Cell2D.py import Cell2D
 from enum import Enum
+import copy
+from scipy.signal import correlate2d
 
 # Here's how animate works
 # https://stackoverflow.com/questions/24816237/ipython-notebook-clear-cell-output-in-code
@@ -11,9 +12,9 @@ from enum import Enum
 
 
 class Strategy(Enum):
-    c = "Cooperate"
-    d = "Defect"
-    s = "Silent"
+    c = 0
+    d = 1
+    s = 2
 
 def underride(d, **options):
     """Add key-value pairs to d only if key is not in d.
@@ -27,15 +28,30 @@ def underride(d, **options):
     return d
 
 
-class BasicWorld(Cell2D):
-
-
-
-    def __init__(self, n=20, m=20, u=0.3, do_mutation = False, do_silent = False, ):
-
-        self.array = [[Agent() for _ in range(m)] for _ in range(n)]
+class BasicWorld():
+    def __init__(self, n=20, m=None, u=0.3, do_mutation = False, do_silent = False, bounds=None,):
+        """
+        bounds is a tuple of (x_start, y_start, x_end, y_end) for a block of
+        cooperators among the sea of defectors.
+        """
+        def agent_at_pos(x, y):
+            if bounds is None:
+                return Agent()
+            else:
+                if (bounds[0] < x < bounds[2]) and (bounds[1] < y < bounds[3]):
+                    return Agent(strategy=Strategy.c)
+                else:
+                    return Agent()
 
         self.curr_step = 0
+
+        self.n = n
+        if m is None:
+            m = self.n
+        self.m = m
+
+        self.array = [[agent_at_pos(x,y) for x in range(self.m)] for y in range(self.n)]
+
 
         self.u = u
         self.kernel= np.array([
@@ -49,31 +65,46 @@ class BasicWorld(Cell2D):
                         ])
 
         self.inherent_fitness_increment_prob = 0.001
-        self.inherent_fitness_increment_prob = 0.1
+        self.inherent_fitness_increment_amt = 0.1
+        self.normalization_constant = 24*(1+ self.u)
 
 
-    def make_cooperate_array(self):
+    def make_pd_results(self):
         """
-        Makes an n x m array, where an element is 1 if the agent there
-        cooperates this timestep, and 0 if it defects
+        Makes an n x m array, where elements are the fitnesses that agents get
+        from playing the PD, both from defecting and from having others
+        cooperate with them.  Boundary conditions are periodic, i.e. agents at
+        the far left play against agents at the far right.
         """
-        return np.array([[1 if agent.cooperate_p(self.curr_step) else 0 for agent in row] for row in self.array])
+        # TODO: Simplify using scipy's wrap boundary condition
+        # To simulate periodic boundaries, we pad the array.  This is how much
+        # we have to do.
+        pad_amt = int((len(self.kernel)+1)/2)
+        coop_array = np.array([[1 if agent.cooperate_p(self.curr_step) else 0 for agent in row] for row in self.array])
+        coop_padded = np.pad(coop_array, pad_amt, mode="wrap")
+
+        # Correlate then cut down.  In theory this could be done in one step
+        # with a different correlation mode, but this is easier to debug.
+        pd_padded = correlate2d(coop_padded, self.kernel, mode="same")
+        pd_results = pd_padded[pad_amt:-pad_amt, pad_amt:-pad_amt]
+        return pd_results
 
     def make_fitness_array(self):
         """
         Makes an n x m array, where each element is that agent's fitness,
         derived from its and others' behaviors and their inherent fitnesses.
         """
-        cooperate_array = self.make_cooperate_array()
-        pd_results = np.correlate(cooperate_array, self.kernel, mode="same")
         inherent_fitnesses = np.array([[agent.inherent_fitness for agent in row] for row in self.array])
-
+        pd_results = self.make_pd_results()
         return pd_results + inherent_fitnesses
 
-    def neighborhood_look(self, loc, fitness_array):
-        pass
-
     def step(self):
+        """
+        Runs a step of the simulation.
+        * Calculate fitness of each agent
+        * Figure out who conquers whom, and let them conquer
+        * Randomly increment inherent fitnesses
+        """
         # make fitness array
         arr = self.make_fitness_array()
 
@@ -83,27 +114,38 @@ class BasicWorld(Cell2D):
         # after picking a cell we then look at ONE OF the four "direct" neighbors (cardinal directions)
         # we compare fitnesses. If our current cell is higher, do nothing.
         # If our current cell has lower fitness we can be replaced with the other cell
-        for (x,y) in np.ndenumerate(arr).shuffle():
+
+        conquering_pairs = [] # Pairs of (conqueror, to_be_conquered)
+        locs = [(x, y) for x in range(self.m) for y in range(self.m)]
+        np.random.shuffle(locs)
+        for x,y in locs:
+            cells_to_compare = [((x-1)%self.m, y), ((x+1)%self.m, y), (x, (y-1)%self.n), (x, (y+1)%self.n)]
+            look_loc = cells_to_compare[np.random.randint(4)]
+
+            invader_val = arr[look_loc[0]][look_loc[1]]
+            curr_val = arr[x][y]
+
+            if invader_val  > curr_val:
+                if (invader_val - curr_val)/self.normalization_constant > np.random.rand(1,1):
+                    conquering_pairs.append((look_loc, (x,y)))
 
 
 
         # have conquering happen [update matrices/agents] -> mutation at odds mut_chance or whatever
+        for x in conquering_pairs:
+            conqueror_loc = x[0]
+            conquered_loc = x[1]
+            self.array[conquered_loc[0]][conquered_loc[1]] = copy.deepcopy(self.array[conqueror_loc[0]][conqueror_loc[1]])
+            self.array[conquered_loc[0]][conquered_loc[1]].mutate()
 
         # Increment random inherent_fitness vars
-        for agent in [agent for agent in self.rows for row in self.array]:
-            if np.random.random < self.inherent_fitness_increment_prob:
-                agent.inherent_fitness += inherent_fitness_increment_amt
+        for agent in [agent for row in self.array for agent in row]:
+            if np.random.random() < self.inherent_fitness_increment_prob:
+                agent.inherent_fitness += self.inherent_fitness_increment_amt
 
 
-
-        return
-
-    def loop(self, t=1):
-        """
-        loops through t number of steps
-        """
-        for x in range(t):
-            step()
+        self.curr_step += 1
+        print("curr step is: ", self.curr_step)
         return
 
     def draw_array(self, array, **options):
@@ -123,11 +165,11 @@ class BasicWorld(Cell2D):
 
         return plt.imshow(array, **options)
 
-    def draw(self, frames, interval=None, step=None):
+    def draw(self, interval=None, step=None):
         """
         Gets the current np array state then draws the array
         """
-        arr = self.make_cooperate_array()
+        arr = np.asarray([[agent.strategy.value for agent in row] for row in self.array])
         self.draw_array(arr)
 
     def animate(self, frames, interval=None, step=None):
@@ -140,21 +182,23 @@ class BasicWorld(Cell2D):
         if step is None:
             step = self.step
 
+        if interval is None:
+            interval = 0.001
+
         plt.figure()
         try:
             for i in range(frames-1):
+                print("On frame: ",i)
                 self.draw()
-                plt.show()
-                if interval:
-                    sleep(interval)
+                # plt.show(block=False)
+                plt.pause(interval)
                 step()
-                clear_output(wait=True)
+                plt.clf()
+                # clear_output(wait=True)
             self.draw()
             plt.show()
         except KeyboardInterrupt:
             pass
-
-
 
 
 
@@ -165,13 +209,30 @@ class Agent():
         self.strategy = strategy
         self.time_to_cooperate = time_to_cooperate
 
-        if self.strategy = Strategy.s:
+        if self.strategy == Strategy.s:
             assert not (time_to_cooperate is None)
 
+    def __tostr__(self):
+        return str(self.strategy)
+
     def cooperate_p(self, t):
-        if self.strategy = Strategy.c:
+        if self.strategy == Strategy.c:
             return True
-        if self.strategy = Strategy.d:
+        if self.strategy == Strategy.d:
             return False
-        if self.strategy = Strategy.s:
+        if self.strategy == Strategy.s:
             return selt.time_to_cooperate < t
+
+    def mutate(self):
+        """
+        Placeholder function; fort the first type of world we do not have a mutate function,
+        so we will come back to implmenet later
+        """
+        return
+
+
+if __name__ == "__main__":
+    bounds = [7, 7, 13, 13]
+    world = BasicWorld(n=100,bounds=bounds)
+    # world.step()
+    world.animate(frames=10000)
