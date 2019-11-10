@@ -158,7 +158,6 @@ class BasicWorld:
                 agent.inherent_fitness += self.inherent_fitness_increment_amt
 
         self.curr_step += 1
-        print("curr step is: ", self.curr_step)
         return
 
     def draw_array(self, array, **options):
@@ -206,7 +205,6 @@ class BasicWorld:
         plt.figure()
         try:
             for i in range(frames - 1):
-                print("On frame: ", i)
                 self.draw()
                 # plt.show(block=False)
                 plt.pause(interval)
@@ -218,6 +216,33 @@ class BasicWorld:
             plt.show()
         except KeyboardInterrupt:
             pass
+
+    def get_stats(self):
+        """
+        Get some summary statistics that might be useful for graphing.  Stats
+        are returned as a dict.
+        Stats are:
+        * "time" : current timestep
+        * "num_c", "num_d", "num_s": Number of agents in each state
+        TODO: Should we refactor this so it returns lists or something?
+        """
+
+        stats = {"time": self.curr_step}
+
+        def count_strat(s):
+            return np.sum(
+                [
+                    (1 if agent.strategy == s else 0)
+                    for row in self.array
+                    for agent in row
+                ]
+            )
+
+        stats["num_c"] = count_strat(Strategy.c)
+        stats["num_d"] = count_strat(Strategy.d)
+        stats["num_s"] = count_strat(Strategy.s)
+
+        return stats
 
 
 class Agent:
@@ -251,5 +276,12 @@ class Agent:
 if __name__ == "__main__":
     bounds = [7, 7, 13, 13]
     world = BasicWorld(n=100, bounds=bounds)
-    # world.step()
-    world.animate(frames=10000, skip=5)
+    # world.animate(frames=10000, skip=5)
+
+    stats = {"time": [], "num_c": [], "num_d": [], "num_s": []}
+    for _ in range(100):
+        world.step()
+        for key, value in world.get_stats().items():
+            stats[key].append(value)
+
+    print(stats)
