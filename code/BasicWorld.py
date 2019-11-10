@@ -12,6 +12,13 @@ from scipy.signal import correlate2d
 # https://stackoverflow.com/questions/24816237/ipython-notebook-clear-cell-output-in-code
 # https://ipython.readthedocs.io/en/stable/api/generated/IPython.display.html#IPython.display.clear_output
 
+"""
+TODO:
+Nick -- Experiments 2/3
+
+Adam -- Graphing of type of person over time
+
+"""
 
 class Strategy(Enum):
     c = 0
@@ -33,7 +40,7 @@ def underride(d, **options):
 
 class BasicWorld:
     def __init__(
-        self, n=20, m=None, u=0.3, do_mutation=False, do_silent=False, bounds=None
+        self, n=20, m=None, u=0.3, do_mutation=False, do_silent=False, bounds=None, mutate_rate=0
     ):
         """
         bounds is a tuple of (x_start, y_start, x_end, y_end) for a block of
@@ -50,6 +57,8 @@ class BasicWorld:
                     return Agent()
 
         self.curr_step = 0
+
+        self.mutate_rate=mutate_rate
 
         self.n = n
         if m is None:
@@ -150,7 +159,8 @@ class BasicWorld:
             self.array[conquered_loc[0]][conquered_loc[1]] = copy.deepcopy(
                 self.array[conqueror_loc[0]][conqueror_loc[1]]
             )
-            self.array[conquered_loc[0]][conquered_loc[1]].mutate()
+            self.array[conquered_loc[0]][conquered_loc[1]].mutate(mutate_rate=self.mutate_rate)
+
 
         # Increment random inherent_fitness vars
         for agent in [agent for row in self.array for agent in row]:
@@ -201,7 +211,7 @@ class BasicWorld:
             step = self.step
 
         if interval is None:
-            interval = 0.001
+            interval = 0.01
 
         plt.figure()
         try:
@@ -222,6 +232,7 @@ class BasicWorld:
 
 class Agent:
     def __init__(self, strategy=Strategy.d, time_to_cooperate=None):
+
         self.inherent_fitness = 0
         self.strategy = strategy
         self.time_to_cooperate = time_to_cooperate
@@ -240,16 +251,25 @@ class Agent:
         if self.strategy == Strategy.s:
             return selt.time_to_cooperate < t
 
-    def mutate(self):
+    def mutate(self, mutate_rate):
         """
         Placeholder function; fort the first type of world we do not have a mutate function,
         so we will come back to implmenet later
         """
-        return
+        num = np.random.rand()
+        print(num)
+        if num < mutate_rate:
+            if self.strategy == Strategy.d:
+                self.strategy = Strategy.c
+
 
 
 if __name__ == "__main__":
-    bounds = [7, 7, 13, 13]
-    world = BasicWorld(n=100, bounds=bounds)
+    # bounds = [9, 9, 11, 11]
+    bounds = None
+    mutate_rate = 1e-2
+    world = BasicWorld(n=40,bounds=bounds, mutate_rate=mutate_rate)
     # world.step()
-    world.animate(frames=10000, skip=5)
+    for x in range(1000):
+        world.step()
+    world.animate(frames=10000, interval=1)
