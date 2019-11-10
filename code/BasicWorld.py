@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import matplotlib.pyplot as plt
 from time import sleep
@@ -16,6 +18,7 @@ class Strategy(Enum):
     d = 1
     s = 2
 
+
 def underride(d, **options):
     """Add key-value pairs to d only if key is not in d.
 
@@ -28,12 +31,15 @@ def underride(d, **options):
     return d
 
 
-class BasicWorld():
-    def __init__(self, n=20, m=None, u=0.3, do_mutation = False, do_silent = False, bounds=None,):
+class BasicWorld:
+    def __init__(
+        self, n=20, m=None, u=0.3, do_mutation=False, do_silent=False, bounds=None
+    ):
         """
         bounds is a tuple of (x_start, y_start, x_end, y_end) for a block of
         cooperators among the sea of defectors.
         """
+
         def agent_at_pos(x, y):
             if bounds is None:
                 return Agent()
@@ -50,24 +56,26 @@ class BasicWorld():
             m = self.n
         self.m = m
 
-        self.array = [[agent_at_pos(x,y) for x in range(self.m)] for y in range(self.n)]
-
+        self.array = [
+            [agent_at_pos(x, y) for x in range(self.m)] for y in range(self.n)
+        ]
 
         self.u = u
-        self.kernel= np.array([
-                        [1/3, 1/3, 1/3, 1/3, 1/3, 1/3, 1/3],
-                        [1/3, 1/2, 1/2, 1/2, 1/2, 1/2, 1/3],
-                        [1/3, 1/2, 1,   1,   1,   1/2, 1/3],
-                        [1/3, 1/2, 1,  -u,   1,   1/2, 1/3],
-                        [1/3, 1/2, 1,   1,   1,   1/2, 1/3],
-                        [1/3, 1/2, 1/2, 1/2, 1/2, 1/2, 1/3],
-                        [1/3, 1/3, 1/3, 1/3, 1/3, 1/3, 1/3],
-                        ])
+        self.kernel = np.array(
+            [
+                [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
+                [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
+                [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
+                [1 / 3, 1 / 2, 1, -u, 1, 1 / 2, 1 / 3],
+                [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
+                [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
+                [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
+            ]
+        )
 
         self.inherent_fitness_increment_prob = 0.001
         self.inherent_fitness_increment_amt = 0.1
-        self.normalization_constant = 24*(1+ self.u)
-
+        self.normalization_constant = 24 * (1 + self.u)
 
     def make_pd_results(self):
         """
@@ -79,8 +87,13 @@ class BasicWorld():
         # TODO: Simplify using scipy's wrap boundary condition
         # To simulate periodic boundaries, we pad the array.  This is how much
         # we have to do.
-        pad_amt = int((len(self.kernel)+1)/2)
-        coop_array = np.array([[1 if agent.cooperate_p(self.curr_step) else 0 for agent in row] for row in self.array])
+        pad_amt = int((len(self.kernel) + 1) / 2)
+        coop_array = np.array(
+            [
+                [1 if agent.cooperate_p(self.curr_step) else 0 for agent in row]
+                for row in self.array
+            ]
+        )
         coop_padded = np.pad(coop_array, pad_amt, mode="wrap")
 
         # Correlate then cut down.  In theory this could be done in one step
@@ -94,7 +107,9 @@ class BasicWorld():
         Makes an n x m array, where each element is that agent's fitness,
         derived from its and others' behaviors and their inherent fitnesses.
         """
-        inherent_fitnesses = np.array([[agent.inherent_fitness for agent in row] for row in self.array])
+        inherent_fitnesses = np.array(
+            [[agent.inherent_fitness for agent in row] for row in self.array]
+        )
         pd_results = self.make_pd_results()
         return pd_results + inherent_fitnesses
 
@@ -115,34 +130,40 @@ class BasicWorld():
         # we compare fitnesses. If our current cell is higher, do nothing.
         # If our current cell has lower fitness we can be replaced with the other cell
 
-        conquering_pairs = [] # Pairs of (conqueror, to_be_conquered)
+        conquering_pairs = []  # Pairs of (conqueror, to_be_conquered)
         locs = [(x, y) for x in range(self.m) for y in range(self.m)]
         np.random.shuffle(locs)
-        for x,y in locs:
-            cells_to_compare = [((x-1)%self.m, y), ((x+1)%self.m, y), (x, (y-1)%self.n), (x, (y+1)%self.n)]
+        for x, y in locs:
+            cells_to_compare = [
+                ((x - 1) % self.m, y),
+                ((x + 1) % self.m, y),
+                (x, (y - 1) % self.n),
+                (x, (y + 1) % self.n),
+            ]
             look_loc = cells_to_compare[np.random.randint(4)]
 
             invader_val = arr[look_loc[0]][look_loc[1]]
             curr_val = arr[x][y]
 
-            if invader_val  > curr_val:
-                if (invader_val - curr_val)/self.normalization_constant > np.random.rand(1,1):
-                    conquering_pairs.append((look_loc, (x,y)))
-
-
+            if invader_val > curr_val:
+                if (
+                    invader_val - curr_val
+                ) / self.normalization_constant > np.random.rand(1, 1):
+                    conquering_pairs.append((look_loc, (x, y)))
 
         # have conquering happen [update matrices/agents] -> mutation at odds mut_chance or whatever
         for x in conquering_pairs:
             conqueror_loc = x[0]
             conquered_loc = x[1]
-            self.array[conquered_loc[0]][conquered_loc[1]] = copy.deepcopy(self.array[conqueror_loc[0]][conqueror_loc[1]])
+            self.array[conquered_loc[0]][conquered_loc[1]] = copy.deepcopy(
+                self.array[conqueror_loc[0]][conqueror_loc[1]]
+            )
             self.array[conquered_loc[0]][conquered_loc[1]].mutate()
 
         # Increment random inherent_fitness vars
         for agent in [agent for row in self.array for agent in row]:
             if np.random.random() < self.inherent_fitness_increment_prob:
                 agent.inherent_fitness += self.inherent_fitness_increment_amt
-
 
         self.curr_step += 1
         print("curr step is: ", self.curr_step)
@@ -151,13 +172,16 @@ class BasicWorld():
     def draw_array(self, array, **options):
         """Draws the cells."""
         n, m = array.shape
-        options = underride(options,
-                            cmap='Greens',
-                            alpha=0.7,
-                            vmin=0, vmax=1,
-                            interpolation='none',
-                            origin='upper',
-                            extent=[0, m, 0, n])
+        options = underride(
+            options,
+            cmap="Greens",
+            alpha=0.7,
+            vmin=0,
+            vmax=1,
+            interpolation="none",
+            origin="upper",
+            extent=[0, m, 0, n],
+        )
 
         plt.axis([0, m, 0, n])
         plt.xticks([])
@@ -169,7 +193,9 @@ class BasicWorld():
         """
         Gets the current np array state then draws the array
         """
-        arr = np.asarray([[agent.strategy.value for agent in row] for row in self.array])
+        arr = np.asarray(
+            [[agent.strategy.value for agent in row] for row in self.array]
+        )
         self.draw_array(arr)
 
     def animate(self, frames, interval=None, step=None):
@@ -187,8 +213,8 @@ class BasicWorld():
 
         plt.figure()
         try:
-            for i in range(frames-1):
-                print("On frame: ",i)
+            for i in range(frames - 1):
+                print("On frame: ", i)
                 self.draw()
                 # plt.show(block=False)
                 plt.pause(interval)
@@ -201,10 +227,8 @@ class BasicWorld():
             pass
 
 
-
-class Agent():
-
-    def __init__(self,  strategy=Strategy.d, time_to_cooperate = None):
+class Agent:
+    def __init__(self, strategy=Strategy.d, time_to_cooperate=None):
         self.inherent_fitness = 0
         self.strategy = strategy
         self.time_to_cooperate = time_to_cooperate
@@ -233,6 +257,6 @@ class Agent():
 
 if __name__ == "__main__":
     bounds = [7, 7, 13, 13]
-    world = BasicWorld(n=100,bounds=bounds)
+    world = BasicWorld(n=100, bounds=bounds)
     # world.step()
     world.animate(frames=10000)
