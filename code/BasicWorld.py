@@ -50,6 +50,7 @@ class BasicWorld:
         do_silent=False,
         bounds=None,
         mutate_rate=0,
+        silent_coop=False,
     ):
         """
         bounds is a tuple of (x_start, y_start, x_end, y_end) for a block of
@@ -58,12 +59,12 @@ class BasicWorld:
 
         def agent_at_pos(x, y):
             if bounds is None:
-                return Agent()
+                return Agent(silent_coop=silent_coop)
             else:
                 if (bounds[0] < x < bounds[2]) and (bounds[1] < y < bounds[3]):
-                    return Agent(strategy=Strategy.c)
+                    return Agent(strategy=Strategy.c, silent_coop=silent_coop)
                 else:
-                    return Agent()
+                    return Agent(silent_coop=silent_coop)
 
         self.curr_step = 0
 
@@ -169,7 +170,7 @@ class BasicWorld:
                 self.array[conqueror_loc[0]][conqueror_loc[1]]
             )
             self.array[conquered_loc[0]][conquered_loc[1]].mutate(
-                mutate_rate=self.mutate_rate
+                mutate_rate=self.mutate_rate, curr_step=self.curr_step
             )
 
         # Increment random inherent_fitness vars
@@ -178,6 +179,7 @@ class BasicWorld:
                 agent.inherent_fitness += self.inherent_fitness_increment_amt
 
         self.curr_step += 1
+
         return
 
     def draw_array(self, array, **options):
@@ -266,17 +268,29 @@ class BasicWorld:
 
 
 class Agent:
-    def __init__(self, strategy=Strategy.d, time_to_cooperate=None):
+    def __init__(self, strategy=Strategy.d, silent_coop=False):
 
+        self.silent_coop_chance = 1E-2
         self.inherent_fitness = 0
         self.strategy = strategy
-        self.time_to_cooperate = time_to_cooperate
+        self.coop_valid = silent_coop
 
-        if self.strategy == Strategy.s:
-            assert not (time_to_cooperate is None)
+        if silent_coop:
+            if np.random.random() < self.silent_coop_chance:
+                self.silent_coop = True
+                self.time_to_cooperate = int(np.random.exponential(200))
+                self.strategy= Strategy.s
+                print(self.time_to_cooperate)
+            else:
+                self.time_to_cooperate = None
+                self.silent_coop = False
+        else:
+            self.time_to_cooperate = None
+            self.silent_coop = False
 
     def __tostr__(self):
         return str(self.strategy)
+
 
     def cooperate_p(self, t):
         if self.strategy == Strategy.c:
@@ -284,25 +298,31 @@ class Agent:
         if self.strategy == Strategy.d:
             return False
         if self.strategy == Strategy.s:
-            return selt.time_to_cooperate < t
+            return self.time_to_cooperate < t
 
-    def mutate(self, mutate_rate):
+    def mutate(self, mutate_rate, curr_step):
         """
         Placeholder function; fort the first type of world we do not have a mutate function,
         so we will come back to implmenet later
         """
         num = np.random.rand()
         if num < mutate_rate:
-            if self.strategy == Strategy.d:
-                self.strategy = Strategy.c
-
+            if self.coop_valid:
+                self.strategy = Strategy.s
+                self.time_to_cooperate = int(np.random.exponential(200)) + curr_step
+                print("that worked?!", self.time_to_cooperate)
+            else:
+                if self.strategy == Strategy.d:
+                    self.strategy = Strategy.c
 
 if __name__ == "__main__":
     mutate_rate = 1e-2
-    world = BasicWorld(n=40, mutate_rate=mutate_rate, bounds=(18, 18, 22, 22))
+    # world = BasicWorld(n=40, mutate_rate=mutate_rate, bounds=(18, 18, 22, 22), silent_coop=False)
+    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": []}
-    for _ in range(1000):
+    for _ in range(10000):
         world.step()
         for key, value in world.get_stats().items():
             stats[key].append(value)
