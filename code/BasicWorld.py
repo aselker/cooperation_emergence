@@ -298,12 +298,19 @@ class Agent:
 
 if __name__ == "__main__":
     mutate_rate = 1e-2
-    world = BasicWorld(n=40, mutate_rate=mutate_rate)
+    world = BasicWorld(n=40, mutate_rate=mutate_rate, bounds=(18, 18, 22, 22))
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": []}
-    for _ in range(100):
+    for _ in range(1000):
         world.step()
         for key, value in world.get_stats().items():
             stats[key].append(value)
 
-    print(stats)
+    plt.plot(stats["time"], stats["num_c"], label="Cooperators")
+    plt.plot(stats["time"], stats["num_d"], label="Defectors")
+    plt.plot(stats["time"], stats["num_s"], label="Silents")
+
+    plt.xlabel("Time (steps)")
+    plt.ylabel("Number of agents")
+    plt.legend()
+    plt.show()
