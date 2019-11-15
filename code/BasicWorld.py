@@ -7,6 +7,7 @@ from IPython.display import clear_output
 from enum import Enum
 import copy
 from scipy.signal import correlate2d
+import random
 
 # Here's how animate works
 # https://stackoverflow.com/questions/24816237/ipython-notebook-clear-cell-output-in-code
@@ -150,7 +151,7 @@ class BasicWorld:
                 (x, (y - 1) % self.n),
                 (x, (y + 1) % self.n),
             ]
-            look_loc = cells_to_compare[np.random.randint(4)]
+            look_loc = cells_to_compare[random.randint(0, 3)]
 
             invader_val = arr[look_loc[0]][look_loc[1]]
             curr_val = arr[x][y]
