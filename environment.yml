@@ -1,0 +1,8 @@
+name: SonosSCOPE
+
+dependencies:
+  - python=3.7
+  - numpy
+  - matplotlib
+  - scipy
+  - pip
