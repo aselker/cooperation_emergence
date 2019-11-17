@@ -44,7 +44,7 @@ class BasicWorld:
         self,
         n=20,
         m=None,
-        u=0.3,
+        u=0.09,
         do_mutation=False,
         do_silent=False,
         bounds=None,
@@ -84,12 +84,13 @@ class BasicWorld:
                 [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
                 [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
                 [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
-                [1 / 3, 1 / 2, 1, -u, 1, 1 / 2, 1 / 3],
+                [1 / 3, 1 / 2, 1, 0, 1, 1 / 2, 1 / 3],
                 [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
                 [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
                 [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
             ]
         )
+        self.kernel[2][2] = -u *np.sum(self.kernel)
 
         self.inherent_fitness_increment_prob = 0.001
         self.inherent_fitness_increment_amt = 0.1
@@ -321,7 +322,7 @@ if __name__ == "__main__":
 
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": []}
-    num = 100
+    num = 100000
     for x in range(num):
         world.step()
         for key, value in world.get_stats().items():
