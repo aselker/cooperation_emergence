@@ -8,10 +8,9 @@ from enum import Enum
 import copy
 from scipy.signal import correlate2d
 import random
-
-# Here's how animate works
-# https://stackoverflow.com/questions/24816237/ipython-notebook-clear-cell-output-in-code
-# https://ipython.readthedocs.io/en/stable/api/generated/IPython.display.html#IPython.display.clear_output
+import time
+import datetime
+import json
 
 """
 TODO:
@@ -270,7 +269,7 @@ class BasicWorld:
 class Agent:
     def __init__(self, strategy=Strategy.d, silent_coop=False):
 
-        self.silent_coop_chance = 1E-2
+        self.silent_coop_chance = 1E-4
         self.inherent_fitness = 0
         self.strategy = strategy
         self.coop_valid = silent_coop
@@ -280,7 +279,7 @@ class Agent:
                 self.silent_coop = True
                 self.time_to_cooperate = int(np.random.exponential(200))
                 self.strategy= Strategy.s
-                print(self.time_to_cooperate)
+                # print(self.time_to_cooperate)
             else:
                 self.time_to_cooperate = None
                 self.silent_coop = False
@@ -310,22 +309,29 @@ class Agent:
             if self.coop_valid:
                 self.strategy = Strategy.s
                 self.time_to_cooperate = int(np.random.exponential(200)) + curr_step
-                print("that worked?!", self.time_to_cooperate)
+                # print("that worked?!", self.time_to_cooperate)
             else:
                 if self.strategy == Strategy.d:
                     self.strategy = Strategy.c
 
 if __name__ == "__main__":
-    mutate_rate = 1e-2
+    mutate_rate = 1e-4
     # world = BasicWorld(n=40, mutate_rate=mutate_rate, bounds=(18, 18, 22, 22), silent_coop=False)
     world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": []}
-    for _ in range(10000):
+    num = 100
+    for x in range(num):
         world.step()
         for key, value in world.get_stats().items():
-            stats[key].append(value)
+            if type(value) == np.int64:
+                stats[key].append(int(value))
+            else:
+                stats[key].append(value)
+
+        if x % 1000 == 0:
+            print(x/1000)
 
     plt.plot(stats["time"], stats["num_c"], label="Cooperators")
     plt.plot(stats["time"], stats["num_d"], label="Defectors")
@@ -334,4 +340,8 @@ if __name__ == "__main__":
     plt.xlabel("Time (steps)")
     plt.ylabel("Number of agents")
     plt.legend()
+
+    file = f'{num}_timesteps_on_{datetime.datetime.now().strftime("%B %d %Y at %I:%M:%S%p")}.json'
+    json.dump(stats,open(file,'w'), sort_keys=True, indent=4)
+
     plt.show()
