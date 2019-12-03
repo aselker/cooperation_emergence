@@ -1,16 +1,6 @@
 # Cooperation Emergence in a Greedy Society
 Adam Selker & Nick Sherman
 
-
-1) What is the application domain?  What is the system of interest?
-2) What is the primary experimental question the authors address?
-3) What kind of model do they use?
-4) What methods do they apply to the model?   Analysis?  Simulation?
-5) What work does the model do?  Predict?  Explain?  Design?
-6) What validation do the authors report?
-7) How are the results presented?  Is there a punchline figure?  How do we interpret it?
-8) How do we interpret the results as an answer to the original question?
-
 ## Abstract
 Cooperation in a species seems counterintuitive to the idea of "survival of the fittest," as although cooperation as a whole can help a species, greediness can help an individual more. Our aim was to explore possible ways that cooperation appears in a population, in order to better understand how it may begin and how it could overcome greedy strategies for survival. In order to understand this, we simulate a variety of ways that cooperation could emerge in bacterial colonies on a biofilm, as seen in Hashem et al. Through this research, we determined that cooperation can successfully emerge through such strategies as a "silent cooperator" gene and [something].
 
@@ -74,15 +64,28 @@ TODO: Add our own images here.
 ![The level of cooperators is noisy but low.](images/exp2_fig2.png)
 
 ### Experiment 3: Add silent-cooperator state
-The third experiment involves adding a silent-cooperator allele that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become "activate," resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, resulting in clusters suddenly forming later on that are above the critical threshold for cooperator success. Within the experiment, the amount of time before activation was exponentially distributed with a mean of 200 time steps. 
+The third experiment involves adding a silent-cooperator allele that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become "activate," resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, resulting in clusters suddenly forming later on that are above the critical threshold for cooperator success. Within the experiment, the amount of time before activation was exponentially distributed with a mean of 200 time steps. A sample run of the experiment can be seen in the below sampling of images at steps 1, 3001, and 10000.
+![](images/exp3_t0.png)
+
+Figure n: The starting state of the world.
+
+![](images/exp3_t1001.png)
+Figure n+1: The state of the world after 1001 steps. Cooperators are beginning to appear.
+
+![](images/exp3_t3001.png)
+Figure n+2: The state of the world after 3001 steps. Cooperators are beginning to control a majority of the world.
+
+![](images/exp3_t10000.png)
+Figure n+3: The state of the world after 10000 steps. Cooperators control a solid majority of the world and are slowly eliminating defectors.
+
+![](images/exp3_final_graph.png)
+Figure n+4: The state of the world over time. Original "cooperators" do not exist. [TODO: regraph]
+
 
 
 #### Results of Experiment 3
-For experiment 3, we expect there to be no cooperators at first, but when a group of cooperators appears that is large enough to be above the critical size, we expect to see them gradually take over the entire region as seen in the below image, taken from the original paper.
+Experiment 3 proves that cooperation can appear in a population of defectors if there is a trigger of some kind that causes a large body of cells to suddenly become cooperators. This aligns with what the original experiment was hoping to predict, but we had to make a small of a higher mutation rate in order to achieve these results. Due in part to compute power and in part due to time limitations, we had to run experiments for 10,000 timesteps instead of 100,000 timesteps as in the original paper. Therefore, we had to increase the mutation rate and found that we need to increase it from 1e-2 from 1e-4. Further steps include trying to determine if a mutation rate of 1e-4 will work on the timeframe that Hashem et al. used.
 
-TODO: Add our own images here.
-![Eventually, silent cooperators take over.](images/exp3_fig1.png)
-![Cooperators spread steadily until they fill the whole grid.](images/exp3_fig2.png)
 
 ### Experiment 4 (extension): Other Strategies
 The agents considered thus far only choose to cooperate or defect based on their own genome.  A broader array of strategies could be implemented, including:
