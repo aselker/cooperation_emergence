@@ -49,7 +49,7 @@ Replication is controlled by fitness.  During each timestep, each cell plays the
 
 ## Experiments
 ### Experiment 1: Basic System replication
-The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of cells in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors.  Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand. In order to test our model's similarity, we test multiple times at a 5x5 grid, and find that the cooperators might survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks reliably die out, and 6x6 cooperator blocks reliably survive.
+The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors. 
 
 ![A 5x5 run of experiment 1 that survives](images/exp1_5x5_success.png)
 Fig 1: An example of experiment 1 where a 5x5 block of cooperators survives and dominates the system.
@@ -58,10 +58,12 @@ Fig 1: An example of experiment 1 where a 5x5 block of cooperators survives and 
 Fig 2: An example of experiment 1 where a 5x5 block of cooperators dies off.
 
 #### Results of Experiment 1
-The results of experiment 1 show that the system is not set in stone as Hashem et al. tried to claim. We have replicated their setup as was shared in their paper, and were unable to replicate their exact results. Despite this, our experiment 1 results were actually positive--they demonstrate that our system works and is not deterministic. System demonstration is important, as in future experiments we are experimenting with ways to generate an initial block of cooperators, and proof that a block of cooperators can survive is imperative to experiment success. Non-determinism supports results shown by multiple runs of the experiment, helping to show that consistent results are significantly less likely to be due to chance.
+Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand. In order to test our model's similarity, we test multiple times at a 5x5 grid, and find that the cooperators might survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks reliably die out, and 6x6 cooperator blocks reliably survive.
+
+The results of our first experiment show that, while the system is not totally deterministic, groups of cooperators do seem to expand if they reach a critical size of around 5x5.  In contrast to Hashem et al., 5x5 clusters seem unstable; the other results are consistent with their findings.
 
 ### Experiment 2: Mutation
-Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to either the
+Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.
 
 #### Results of Experiment 2
 We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.
