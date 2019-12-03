@@ -49,7 +49,7 @@ Replication is controlled by fitness.  During each timestep, each cell plays the
 
 ## Experiments
 ### Experiment 1: Basic System replication
-The first step of the experiment was to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm. In Hashem et al., their setup had squares of cooperators smaller than 6x6 dying out. In order to test our model's similarity, we tested multiple times at a 5x5 grids, and found that the cooperators could survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks died out and 6x6 cooperator blocks survived.
+The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of cells in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors.  Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand. In order to test our model's similarity, we test multiple times at a 5x5 grid, and find that the cooperators might survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks reliably die out, and 6x6 cooperator blocks reliably survive.
 
 ![A 5x5 run of experiment 1 that survives](images/exp1_5x5_success.png)
 Fig 1: An example of experiment 1 where a 5x5 block of cooperators survives and dominates the system.
