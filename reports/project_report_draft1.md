@@ -12,53 +12,47 @@ Adam Selker & Nick Sherman
 8) How do we interpret the results as an answer to the original question?
 
 ## Abstract
-Cooperation in a species seems counterintuitive to the idea of "survival of the fittest," as although cooperation as a whole can help a species, greediness can help an individual more. Our aim was to explore possible ways that cooperation appears in a population, in order to better understand how it may begin and how it could overcome greedy strategies for survival. In order to understand this, we simulate a variety of ways that cooperation could emerge in bacterial colonies on a biofilm, as seen in Hashem et al. Through this research, we determined that cooperation can successfully emerge through such strategies as a "silent cooperator" gene and [something].
+Cooperation in a species seems counterintuitive to the idea of "survival of the fittest," as although cooperation as a whole can help a species, greediness can help an individual more. Our aim was to explore possible ways that cooperation appears in a population, in order to better understand how it may begin and how it could overcome greedy strategies for survival. In order to understand this, we simulate a variety of ways that cooperation could emerge in bacterial colonies on a biofilm, as seen in Hashem et al. Through this research, we determined that cooperation can successfully emerge through such strategies as a "silent cooperator" gene and _________________.
 
 
 ## Overview
-In this experiment, we built a computational model that represents a biofilm.  Each cell in a two-dimensional grid represents a cell, which has a simple genome, and can mutate, replicate into other spaces (killing those cells' previous occupants), or be killed when another cell replicates into its space.
+In this experiment, we built a computational model that represents a biofilm.  Each cell in a two-dimensional grid represents a bacterium, which has a simple genome, and can mutate, replicate into other spaces (killing those cells' previous occupants), or be killed when another bacterium replicates into its space.
 
-Replication is controlled by fitness, which is driven by two factors.  First, each cell has a general fitness gene, which is intended to represent the effects of all of the cell's genes which are not represented in this model.  The general fitness gene is initialized with a value of 0, meaning "no effect"; in some simulations, it is randomly incremented to represent helpful mutations.
+Replication is controlled by fitness, which is driven by several factors (explained below).  At the end of each timestep, each bacterium is compared to a random one of its neighbors.  If the neighbor's fitness is higher, the neighbor might invade, with a probability (F_2 - F_1)/k, where F_2 is the invading cell's fitness, F_1 is the invaded cell's fitness, and k is a constant equal to 24 + 24u (u is another constant that's used in the Prisoner's Dilemma problem, as seen in the next paragraph).
 
-The second factor is the Prisoner's Dilemma (PD) games which the cells play against each other.  Each cell can "cooperate" or "defect" with other cells; both cells' actions affect the fitness scores of both.  Cooperating decreases the cooperator's fitness, but increases the fitness of the other cells by a greater amount; defecting is a net loss of fitness, but helps the defector.  The payoff matrix for cell A playing against cell B is shown in figure N.
+The bacteria play a Prisoner's Dilemma (PD) game against each other, where each can cooperate or defect with its neighbors.  Cooperating decreases the cooperator's fitness, but increases the fitness of the other bacteria by a greater amount; defecting is a net loss of fitness, but helps the defector.  The normalized payoff matrix for a cell B acting on cell A is :
 
 |   | A Cooperator   | A Defector |
 |---|---|---|
-| B Cooperator | 1 | 1 + u |
-| B Defector | 0 | u |
-Figure N: Prisoner's Dilemma payoff matrix for A
+| B Cooperator   | 1  | 0  |
+| B Defector   | 1 + u  | u  |
 
-The constant u is set to 0.09 in this simulation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in figure M.
+
+The constant u is set to 0.09 in this simulation.  Each cell cooperates or defects according to its genome.  There are three "behavior" alleles: Cooperate (C), which always cooperates; Defect (D), which always defects; and Silent (S), which defects for a time and then begins to cooperate.  The "timer" that controls the transition is initialized (exponentially distributed, with a mean of 200 steps) when a cell mutates into the S strategy, and is passed on if it replicates. The Prisoner's Dilemma game is also played with neighbors up to 3 spaces away, with  payoffs decreasing according to how many tiles the other cells were away from the current cell. The full table can be seen below.
 
 ```
-1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3
-1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3
-1 / 3, 1 / 2,     1,     1,     1, 1 / 2, 1 / 3
-1 / 3, 1 / 2,     1,     X,     1, 1 / 2, 1 / 3
-1 / 3, 1 / 2,     1,     1,     1, 1 / 2, 1 / 3
-1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3
-1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3
+[[1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
+ [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
+ [1 / 3, 1 / 2,     1,     1,     1, 1 / 2, 1 / 3],
+ [1 / 3, 1 / 2,     1,     u,     1, 1 / 2, 1 / 3],
+ [1 / 3, 1 / 2,     1,     1,     1, 1 / 2, 1 / 3],
+ [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
+ [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3]]
 ```
-Figure M: Cells play the PD against every other cell within 3 spaces, with varying weights.
-
- Each cell cooperates or defects according to its genome.  There are three "behavior" alleles: Cooperate (C), which always cooperates; Defect (D), which always defects; and Silent (S), which defects for a time and then begins to cooperate.  The "timer" that controls the transition is initialized (exponentially distributed, with a mean of 200 steps) when a cell mutates into the S strategy, and is passed on if it replicates.
-
-
-Replication is controlled by fitness.  During each timestep, each cell plays the PD against its neighbors, and the results are summed.  The cell's general fitness factor is added, to produce the cell's fitness.  Then, the cell is compared to a random one of its neighbors.  If the neighbor's fitness is higher, the neighbor might invade, with a probability (F_2 - F_1)/k, where F_2 is the invading cell's fitness, F_1 is the invaded cell's fitness, and k is a constant equal to 24 + 24u.
 
 
 ## Experiments
 ### Experiment 1: Basic System replication
-The first step of the experiment was to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm. In Hashem et al., their setup had squares of cooperators smaller than 6x6 dying out.
+The first step of the experiment was to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm. In Hashem et al., their setup had squares of cooperators smaller than 6x6 dying out. In order to test our model's similarity, we tested multiple times at a 5x5 grids, and found that the cooperators could survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks died out and 6x6 cooperator blocks survived.
 
+![A 5x5 run of experiment 1 that survives](images/exp1_5x5_success.png)
+Fig 1: An example of experiment 1 where a 5x5 block of cooperators survives and dominates the system.
 
-
-For our first experiment, we built a basic world that models the cells as cooperators or defectors, and create behavior that replicates what the paper demonstrated. What this will consist of is some cellular automata system that exists in a world where every location has a cell, and the cell interacts with its neighbors regarding food obtaining. The goal here is to build a basic model to be expanded upon in future experiments
+![A 5x5 run of experiment 1 that dies](images/exp1_5x5_failure.png)
+Fig 2: An example of experiment 1 where a 5x5 block of cooperators dies off.
 
 #### Results of Experiment 1
-The results of Experiment 1 should lead to a near-deterministic system that will allow defectors to take over if there aren’t enough cooperators or will allow cooperators to dominate, leaving strips of defectors as in the original paper. A sample image of this can be seen below, taken from the original paper.
-
-![Below critical size, groups of cooperators do not expand.](images/exp1_fig1.png)
+The results of experiment 1 show that the system is not set in stone as Hashem et al. tried to claim. We have replicated their setup as was shared in their paper, and were unable to replicate their exact results. Despite this, our experiment 1 results were actually positive--they demonstrate that our system works and is not deterministic. System demonstration is important, as in future experiments we are experimenting with ways to generate an initial block of cooperators, and proof that a block of cooperators can survive is imperative to experiment success. Non-determinism supports results shown by multiple runs of the experiment, helping to show that consistent results are significantly less likely to be due to chance.
 
 ### Experiment 2: Mutation
 Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to either the
@@ -88,6 +82,8 @@ The agents considered thus far only choose to cooperate or defect based on their
 * Strategies which depend on other cells’ past behavior
 * Strategies with random elements
 * Strategies which act differently based on cells’ relative positions
+
+As of now, we focused on documenting the other experiments and discussing our current results. The strategies we will be pursuing are strategies with more random elements 
 
 #### Results of Experiment 4
 Experiment 4’s results will vary heavily on the details of what we implement.  It seems likely that more “intelligent” strategies, such as tit-for-tat with noise and forgiveness, might dominate both defectors and cooperators due to their ability to cooperate with each other and defect against less-intelligent agents.  There may also be dynamic equilibria when strategies have multi-way rock-paper-scissors dominance over each other.

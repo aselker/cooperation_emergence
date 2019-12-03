@@ -317,7 +317,7 @@ class Agent:
 
 if __name__ == "__main__":
     mutate_rate = 0 #1e-4
-    world = BasicWorld(n=40, mutate_rate=mutate_rate, bounds=(18, 18, 22, 22), silent_coop=False)
+    world = BasicWorld(n=40, mutate_rate=mutate_rate, bounds=(17, 17, 22, 22), silent_coop=False)
     # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
 
