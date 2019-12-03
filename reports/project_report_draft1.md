@@ -26,7 +26,8 @@ The second factor is the Prisoner's Dilemma (PD) games which the cells play agai
 |---|---|---|
 | B Cooperator | 1 | 1 + u |
 | B Defector | 0 | u |
-Figure N: Prisoner's Dilemma payoff matrix for A
+
+Figure 1: Prisoner's Dilemma payoff matrix for A
 
 The constant u is set to 0.09 in this simulation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in figure M.
 
@@ -49,13 +50,13 @@ Replication is controlled by fitness.  During each timestep, each cell plays the
 
 ## Experiments
 ### Experiment 1: Basic System replication
-The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors. 
+The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors.
 
 ![A 5x5 run of experiment 1 that survives](images/exp1_5x5_success.png)
-Fig 1: An example of experiment 1 where a 5x5 block of cooperators survives and dominates the system.
+Figure 2: An example of experiment 1 where a 5x5 block of cooperators survives and dominates the system.
 
 ![A 5x5 run of experiment 1 that dies](images/exp1_5x5_failure.png)
-Fig 2: An example of experiment 1 where a 5x5 block of cooperators dies off.
+Figure 3: An example of experiment 1 where a 5x5 block of cooperators dies off.
 
 #### Results of Experiment 1
 Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand.  In order to test our model's similarity, we test multiple times at a 5x5 grid, and find that the cooperators might survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks reliably die out, and 6x6 cooperator blocks reliably survive.
@@ -75,6 +76,9 @@ TODO: Add our own images here.
 (Figures copied from the original paper)
 
 ### Experiment 3: Add silent-cooperator state
+For the third experiment, we explored the concept of a "silent-cooperator" gene/state that caused a cell to suddenly "become" a cooperator after a certain number of timesteps passed. When taking over a neighboring cell, the silent-cooperator gene would be passed on, with a small chance to mutate the gene if the original conqueror did not have it. The amount of time until the gene activates was exponentially distributed, with a mean of 200.
+
+
 The next part of the experiment involves adding a silent-cooperator “state” that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become “activate,” resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, resulting in clusters suddenly forming later on that are above the critical threshold for cooperator success.
 
 #### Results of Experiment 3
@@ -92,7 +96,7 @@ The agents considered thus far only choose to cooperate or defect based on their
 * Strategies with random elements
 * Strategies which act differently based on cells’ relative positions
 
-As of now, we focused on documenting the other experiments and discussing our current results. The strategies we will be pursuing are strategies with more random elements 
+As of now, we focused on documenting the other experiments and discussing our current results. The strategies we will be pursuing are strategies with more random elements
 
 #### Results of Experiment 4
 Experiment 4’s results will vary heavily on the details of what we implement.  It seems likely that more “intelligent” strategies, such as tit-for-tat with noise and forgiveness, might dominate both defectors and cooperators due to their ability to cooperate with each other and defect against less-intelligent agents.  There may also be dynamic equilibria when strategies have multi-way rock-paper-scissors dominance over each other.

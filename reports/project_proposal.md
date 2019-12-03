@@ -22,7 +22,7 @@ For our first experiment, we need to build a basic world that allows us to model
 #### Results of Experiment 1
 The results of Experiment 1 should lead to a near-deterministic system that will allow defectors to take over if there aren’t enough cooperators or will allow cooperators to dominate, leaving strips of defectors as in the original paper. A sample image of this can be seen below, taken from the original paper.
 
-![Below critical size, groups of cooperators do not expand.](images/exp1_fig1.png)
+![Below critical size, groups of cooperators do not expand.](images/hashem_exp1_fig1.png)
 
 ### Experiment 2: Mutation
 In our second experiment, we will add random mutations to agents’ genomes, both of the behavior section (cooperate or defect) and of the random-fitness section.  We will also remove the initial island of cooperators.
@@ -30,8 +30,8 @@ In our second experiment, we will add random mutations to agents’ genomes, bot
 #### Results of Experiment 2
 We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.
 
-![There are usually a few cooperators.](images/exp2_fig1.png)
-![The level of cooperators is noisy but low.](images/exp2_fig2.png)
+![There are usually a few cooperators.](images/hashem_exp2_fig1.png)
+![The level of cooperators is noisy but low.](images/hashem_exp2_fig2.png)
 
 (Figures copied from the original paper)
 
@@ -41,8 +41,8 @@ The next part of the experiment involves adding a silent-cooperator “state” 
 #### Results of Experiment 3
 For experiment 3, we expect there to be no cooperators at first, but when a group of cooperators appears that is large enough to be above the critical size, we expect to see them gradually take over the entire region as seen in the below image, taken from the original paper.
 
-![Eventually, silent cooperators take over.](images/exp3_fig1.png)
-![Cooperators spread steadily until they fill the whole grid.](images/exp3_fig2.png)
+![Eventually, silent cooperators take over.](images/hashem_exp3_fig1.png)
+![Cooperators spread steadily until they fill the whole grid.](images/hashem_exp3_fig2.png)
 
 (Figures copied from the original paper)
 
@@ -61,7 +61,7 @@ When looking at this project, the whole goal is to understand how cooperation ev
 
 The first experiment’s results make sense--if there is a large enough cooperative group they should dominate due to the benefits of cooperation; if there aren’t enough then they should be quickly eliminated due to not being fit enough in the landscape. This only proves that after a certain size cooperative groups can be successful however, and don’t explain how those cooperative groups form.
 
-The second experiment shows that cooperation appearing in isolation almost always results in failure due to losing the benefits of being near other cooperative entities. This proves that when looking for the root of cooperation, we shouldn’t be looking for a gradual takeover in a society, but instead look for a sudden leap in cooperative entities. 
+The second experiment shows that cooperation appearing in isolation almost always results in failure due to losing the benefits of being near other cooperative entities. This proves that when looking for the root of cooperation, we shouldn’t be looking for a gradual takeover in a society, but instead look for a sudden leap in cooperative entities.
 
 The third experiment’s results show one possible model of cooperative appearance, where agents all suddenly have a silent cooperator gene become activated. This makes sense as a method of success, because the number of cooperators are relatively limited (as when cooperation appears it normally gets quickly eliminated), until a non trivially-sized group appears, which then follows the properties shown in the first experiment. This may differ and completely take over the group depending on how much more successful the cooperative cells are, and based on how many cells have a cooperative gene that become expressed later in their lifespan.
 
