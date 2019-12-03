@@ -105,18 +105,6 @@ The first insight can be derived from Experiment 1.  When the starting cluster w
 
 The second insight can be derived from Experiments 2 and 3.  Where randomly-mutated cooperators failed, silent cooperators sometimes succeeded, their behavior alleles hitchhiking on randomly-high fitness caused by another factor (the general-fitness gene).  The critical feature seems to be simultaneity, since that is the most important difference between silent cooperators and regular cooperators.
 
-	When looking at this project, the whole goal is to understand how cooperation evolves at a societal level because although cooperation can help a species flourish, it seems counter-intuitive at an individual level to be cooperative. Therefore, the results of different tests should allow us to understand different hypothetical roots of where cooperation arose from.
-
-	The first experiment’s results make sense--if there is a large enough cooperative group they should dominate due to the benefits of cooperation; if there aren’t enough then they should be quickly eliminated due to not being fit enough in the landscape. This only proves that after a certain size cooperative groups can be successful however, and don’t explain how those cooperative groups form.
-
-	The second experiment shows that cooperation appearing in isolation almost always results in failure due to losing the benefits of being near other cooperative entities. This proves that when looking for the root of cooperation, we shouldn’t be looking for a gradual takeover in a society, but instead look for a sudden leap in cooperative entities.
-
-	The third experiment’s results show one possible model of cooperative appearance, where agents all suddenly have a silent cooperator gene become activated. This makes sense as a method of success, because the number of cooperators are relatively limited (as when cooperation appears it normally gets quickly eliminated), until a non trivially-sized group appears, which then follows the properties shown in the first experiment. This may differ and completely take over the group depending on how much more successful the cooperative cells are, and based on how many cells have a cooperative gene that become expressed later in their lifespan.
-
-	The fourth experiment’s results will allow us to understand what other ways cooperative behavior can end up appearing in groups of organisms. We expect that “intelligent” strategies will be most successful and that organisms which display a higher level of thought will rule due to what has (seemingly) happened on Earth, but we could still be surprised in our modelling.
-
-
-
 ## Future Work
 
 ## Annotated bibliography
