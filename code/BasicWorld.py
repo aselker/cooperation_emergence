@@ -187,7 +187,7 @@ class BasicWorld:
         n, m = array.shape
         options = underride(
             options,
-            cmap="Greens",
+            cmap="binary",
             alpha=0.7,
             vmin=0,
             vmax=1,
@@ -201,7 +201,7 @@ class BasicWorld:
         plt.yticks([])
         plt.title(f'World state on turn {self.curr_step}')
 
-        return plt.imshow(array, **options)
+        return plt.imshow(array/2, **options)
 
     def draw(self, interval=None, step=None):
         """
