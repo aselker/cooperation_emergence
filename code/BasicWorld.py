@@ -42,7 +42,7 @@ def underride(d, **options):
 class BasicWorld:
     def __init__(
         self,
-        n=20,
+        n=50,
         m=None,
         u=0.09,
         do_mutation=False,
@@ -199,6 +199,7 @@ class BasicWorld:
         plt.axis([0, m, 0, n])
         plt.xticks([])
         plt.yticks([])
+        plt.title(f'World state on turn {self.curr_step}')
 
         return plt.imshow(array, **options)
 
@@ -316,13 +317,13 @@ class Agent:
                     self.strategy = Strategy.c
 
 if __name__ == "__main__":
-    mutate_rate = 0 #1e-4
-    world = BasicWorld(n=40, mutate_rate=mutate_rate, bounds=(17, 17, 22, 22), silent_coop=False)
-    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+    mutate_rate = 1e-2
+    # world = BasicWorld(n=50, mutate_rate=mutate_rate, bounds=(17, 17, 22, 22), silent_coop=False)
+    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": []}
-    num = 5000
+    num = 10000
     for x in range(num):
         world.step()
         for key, value in world.get_stats().items():
@@ -332,19 +333,20 @@ if __name__ == "__main__":
                 stats[key].append(value)
 
         if x % 1000 == 0:
-            print(x/1000)
+            world.animate(1)
+            print(x/num * 100)
 
-    # world.animate(1)
+    world.animate(1)
 
     plt.plot(stats["time"], stats["num_c"], label="Cooperators")
     plt.plot(stats["time"], stats["num_d"], label="Defectors")
-    # plt.plot(stats["time"], stats["num_s"], label="Silents")
+    plt.plot(stats["time"], stats["num_s"], label="Silents")
 
     plt.xlabel("Time (steps)")
     plt.ylabel("Number of agents")
     plt.legend()
 
     file = f'{num}_timesteps_on_{datetime.datetime.now().strftime("%B %d %Y at %I:%M:%S%p")}.json'
-    json.dump(stats,open(file,'w'), sort_keys=True, indent=4)
+    json.dump(stats,open("jsons/"+file,'w'), sort_keys=True, indent=4)
 
     plt.show()
