@@ -12,33 +12,39 @@ Adam Selker & Nick Sherman
 8) How do we interpret the results as an answer to the original question?
 
 ## Abstract
-Cooperation in a species seems counterintuitive to the idea of "survival of the fittest," as although cooperation as a whole can help a species, greediness can help an individual more. Our aim was to explore possible ways that cooperation appears in a population, in order to better understand how it may begin and how it could overcome greedy strategies for survival. In order to understand this, we simulate a variety of ways that cooperation could emerge in bacterial colonies on a biofilm, as seen in Hashem et al. Through this research, we determined that cooperation can successfully emerge through such strategies as a "silent cooperator" gene and _________________.
+Cooperation in a species seems counterintuitive to the idea of "survival of the fittest," as although cooperation as a whole can help a species, greediness can help an individual more. Our aim was to explore possible ways that cooperation appears in a population, in order to better understand how it may begin and how it could overcome greedy strategies for survival. In order to understand this, we simulate a variety of ways that cooperation could emerge in bacterial colonies on a biofilm, as seen in Hashem et al. Through this research, we determined that cooperation can successfully emerge through such strategies as a "silent cooperator" gene and [something].
 
 
 ## Overview
-In this experiment, we built a computational model that represents a biofilm.  Each cell in a two-dimensional grid represents a bacterium, which has a simple genome, and can mutate, replicate into other spaces (killing those cells' previous occupants), or be killed when another bacterium replicates into its space.
+In this experiment, we built a computational model that represents a biofilm.  Each cell in a two-dimensional grid represents a cell, which has a simple genome, and can mutate, replicate into other spaces (killing those cells' previous occupants), or be killed when another cell replicates into its space.
 
-Replication is controlled by fitness, which is driven by several factors (explained below).  At the end of each timestep, each bacterium is compared to a random one of its neighbors.  If the neighbor's fitness is higher, the neighbor might invade, with a probability (F_2 - F_1)/k, where F_2 is the invading cell's fitness, F_1 is the invaded cell's fitness, and k is a constant equal to 24 + 24u (u is another constant that's used in the Prisoner's Dilemma problem, as seen in the next paragraph).
+Replication is controlled by fitness, which is driven by two factors.  First, each cell has a general fitness gene, which is intended to represent the effects of all of the cell's genes which are not represented in this model.  The general fitness gene is initialized with a value of 0, meaning "no effect"; in some simulations, it is randomly incremented to represent helpful mutations.
 
-The bacteria play a Prisoner's Dilemma (PD) game against each other, where each can cooperate or defect with its neighbors.  Cooperating decreases the cooperator's fitness, but increases the fitness of the other bacteria by a greater amount; defecting is a net loss of fitness, but helps the defector.  The normalized payoff matrix for a cell B acting on cell A is :
+The second factor is the Prisoner's Dilemma (PD) games which the cells play against each other.  Each cell can "cooperate" or "defect" with other cells; both cells' actions affect the fitness scores of both.  Cooperating decreases the cooperator's fitness, but increases the fitness of the other cells by a greater amount; defecting is a net loss of fitness, but helps the defector.  The payoff matrix for cell A playing against cell B is shown in figure N.
 
 |   | A Cooperator   | A Defector |
 |---|---|---|
-| B Cooperator   | 1  | 0  |
-| B Defector   | 1 + u  | u  |
+| B Cooperator | 1 | 1 + u |
+| B Defector | 0 | u |
+Figure N: Prisoner's Dilemma payoff matrix for A
 
-
-The constant u is set to 0.09 in this simulation.  Each cell cooperates or defects according to its genome.  There are three "behavior" alleles: Cooperate (C), which always cooperates; Defect (D), which always defects; and Silent (S), which defects for a time and then begins to cooperate.  The "timer" that controls the transition is initialized (exponentially distributed, with a mean of 200 steps) when a cell mutates into the S strategy, and is passed on if it replicates. The Prisoner's Dilemma game is also played with neighbors up to 3 spaces away, with  payoffs decreasing according to how many tiles the other cells were away from the current cell. The full table can be seen below.
+The constant u is set to 0.09 in this simulation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in figure M.
 
 ```
-[[1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
- [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
- [1 / 3, 1 / 2,     1,     1,     1, 1 / 2, 1 / 3],
- [1 / 3, 1 / 2,     1,     u,     1, 1 / 2, 1 / 3],
- [1 / 3, 1 / 2,     1,     1,     1, 1 / 2, 1 / 3],
- [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
- [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3]]
+1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3
+1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3
+1 / 3, 1 / 2,     1,     1,     1, 1 / 2, 1 / 3
+1 / 3, 1 / 2,     1,     X,     1, 1 / 2, 1 / 3
+1 / 3, 1 / 2,     1,     1,     1, 1 / 2, 1 / 3
+1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3
+1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3
 ```
+Figure M: Cells play the PD against every other cell within 3 spaces, with varying weights.
+
+ Each cell cooperates or defects according to its genome.  There are three "behavior" alleles: Cooperate (C), which always cooperates; Defect (D), which always defects; and Silent (S), which defects for a time and then begins to cooperate.  The "timer" that controls the transition is initialized (exponentially distributed, with a mean of 200 steps) when a cell mutates into the S strategy, and is passed on if it replicates.
+
+
+Replication is controlled by fitness.  During each timestep, each cell plays the PD against its neighbors, and the results are summed.  The cell's general fitness factor is added, to produce the cell's fitness.  Then, the cell is compared to a random one of its neighbors.  If the neighbor's fitness is higher, the neighbor might invade, with a probability (F_2 - F_1)/k, where F_2 is the invading cell's fitness, F_1 is the invaded cell's fitness, and k is a constant equal to 24 + 24u.
 
 
 ## Experiments
