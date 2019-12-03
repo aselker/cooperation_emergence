@@ -59,26 +59,37 @@ Once we have established that a sufficiently-sized cluster of cooperators will s
 #### Results of Experiment 2
 We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.  This is in fact what we observe.  It is consistent with Hashem et al.'s findings.
 
-TODO: Add our own images here.
-![There are usually a few cooperators.](images/exp2_fig1.png)
-![The level of cooperators is noisy but low.](images/exp2_fig2.png)
+![](images/exp2_t0.png)  
+Figure n: The starting state of the world.
+
+![](images/exp2_t2001.png)  
+Figure n+1: The state of the world after 2001 steps. Cooperators are beginning to appear.
+
+![](images/exp2_t8001.png)  
+Figure n+2: The state of the world after 8001 steps. Defectors still dominate.
+
+![](images/exp2_t10000.png) 
+Figure n+3: The state of the world after 10000 steps. As at step 8001, there are no cooperators alive.
+
+![](images/exp2_cells_over_time.png)  
+Figure n+4: The state of the world over time. The world is dominated by defectors, with cooperators providing only a bit of noise.
 
 ### Experiment 3: Add silent-cooperator state
 The third experiment involves adding a silent-cooperator allele that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become "activate," resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, resulting in clusters suddenly forming later on that are above the critical threshold for cooperator success. Within the experiment, the amount of time before activation was exponentially distributed with a mean of 200 time steps. A sample run of the experiment can be seen in the below sampling of images at steps 1, 3001, and 10000.
-![](images/exp3_t0.png)
 
+![](images/exp3_t0.png)  
 Figure n: The starting state of the world.
 
-![](images/exp3_t1001.png)
+![](images/exp3_t1001.png)  
 Figure n+1: The state of the world after 1001 steps. Cooperators are beginning to appear.
 
-![](images/exp3_t3001.png)
+![](images/exp3_t3001.png)  
 Figure n+2: The state of the world after 3001 steps. Cooperators are beginning to control a majority of the world.
 
-![](images/exp3_t10000.png)
+![](images/exp3_t10000.png)  
 Figure n+3: The state of the world after 10000 steps. Cooperators control a solid majority of the world and are slowly eliminating defectors.
 
-![](images/exp3_final_graph.png)
+![](images/exp3_final_graph.png)  
 Figure n+4: The state of the world over time. Original "cooperators" do not exist. [TODO: regraph]
 
 
