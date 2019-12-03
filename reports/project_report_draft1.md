@@ -66,6 +66,9 @@ We expect the grid to be stably full of defectors, with a few cooperators occurr
 (Figures copied from the original paper)
 
 ### Experiment 3: Add silent-cooperator state
+For the third experiment, we explored the concept of a "silent-cooperator" gene/state that caused a cell to suddenly "become" a cooperator after a certain number of timesteps passed. When taking over a neighboring cell, the silent-cooperator gene would be passed on, with a small chance to mutate the gene if the original conqueror did not have it. The amount of time until the gene activates was exponentially distributed, with a mean of 200. 
+
+
 The next part of the experiment involves adding a silent-cooperator “state” that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become “activate,” resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, resulting in clusters suddenly forming later on that are above the critical threshold for cooperator success.
 
 #### Results of Experiment 3
@@ -83,7 +86,7 @@ The agents considered thus far only choose to cooperate or defect based on their
 * Strategies with random elements
 * Strategies which act differently based on cells’ relative positions
 
-As of now, we focused on documenting the other experiments and discussing our current results. The strategies we will be pursuing are strategies with more random elements 
+As of now, we focused on documenting the other experiments and discussing our current results. The strategies we will be pursuing are strategies with more random elements
 
 #### Results of Experiment 4
 Experiment 4’s results will vary heavily on the details of what we implement.  It seems likely that more “intelligent” strategies, such as tit-for-tat with noise and forgiveness, might dominate both defectors and cooperators due to their ability to cooperate with each other and defect against less-intelligent agents.  There may also be dynamic equilibria when strategies have multi-way rock-paper-scissors dominance over each other.
