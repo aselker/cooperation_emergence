@@ -90,7 +90,7 @@ class BasicWorld:
                 [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
             ]
         )
-        self.kernel[2][2] = -u *np.sum(self.kernel)
+        self.kernel[2][2] = -u * np.sum(self.kernel)
 
         self.inherent_fitness_increment_prob = 0.001
         self.inherent_fitness_increment_amt = 0.1
@@ -199,7 +199,7 @@ class BasicWorld:
         plt.axis([0, m, 0, n])
         plt.xticks([])
         plt.yticks([])
-        plt.title(f'World state on turn {self.curr_step}')
+        plt.title(f"World state on turn {self.curr_step}")
 
         return plt.imshow(array/2, **options)
 
@@ -271,7 +271,7 @@ class BasicWorld:
 class Agent:
     def __init__(self, strategy=Strategy.d, silent_coop=False):
 
-        self.silent_coop_chance = 1E-4
+        self.silent_coop_chance = 1e-4
         self.inherent_fitness = 0
         self.strategy = strategy
         self.coop_valid = silent_coop
@@ -280,7 +280,7 @@ class Agent:
             if np.random.random() < self.silent_coop_chance:
                 self.silent_coop = True
                 self.time_to_cooperate = int(np.random.exponential(200))
-                self.strategy= Strategy.s
+                self.strategy = Strategy.s
                 # print(self.time_to_cooperate)
             else:
                 self.time_to_cooperate = None
@@ -291,7 +291,6 @@ class Agent:
 
     def __tostr__(self):
         return str(self.strategy)
-
 
     def cooperate_p(self, t):
         if self.strategy == Strategy.c:
@@ -316,11 +315,11 @@ class Agent:
                 if self.strategy == Strategy.d:
                     self.strategy = Strategy.c
 
+
 if __name__ == "__main__":
     mutate_rate = 1e-2
     # world = BasicWorld(n=50, mutate_rate=mutate_rate, bounds=(17, 17, 22, 22), silent_coop=False)
     world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
-
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": []}
     num = 10000
@@ -334,7 +333,7 @@ if __name__ == "__main__":
 
         if x % 1000 == 0:
             world.animate(1)
-            print(x/num * 100)
+            print(x / num * 100)
 
     world.animate(1)
 
@@ -347,6 +346,6 @@ if __name__ == "__main__":
     plt.legend()
 
     file = f'{num}_timesteps_on_{datetime.datetime.now().strftime("%B %d %Y at %I:%M:%S%p")}.json'
-    json.dump(stats,open("jsons/"+file,'w'), sort_keys=True, indent=4)
+    json.dump(stats, open("jsons/" + file, "w"), sort_keys=True, indent=4)
 
     plt.show()
