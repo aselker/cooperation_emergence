@@ -58,7 +58,7 @@ Fig 1: An example of experiment 1 where a 5x5 block of cooperators survives and 
 Fig 2: An example of experiment 1 where a 5x5 block of cooperators dies off.
 
 #### Results of Experiment 1
-Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand. In order to test our model's similarity, we test multiple times at a 5x5 grid, and find that the cooperators might survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks reliably die out, and 6x6 cooperator blocks reliably survive.
+Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand.  In order to test our model's similarity, we test multiple times at a 5x5 grid, and find that the cooperators might survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks reliably die out, and 6x6 cooperator blocks reliably survive.
 
 The results of our first experiment show that, while the system is not totally deterministic, groups of cooperators do seem to expand if they reach a critical size of around 5x5.  In contrast to Hashem et al., 5x5 clusters seem unstable; the other results are consistent with their findings.
 
@@ -66,8 +66,9 @@ The results of our first experiment show that, while the system is not totally d
 Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.
 
 #### Results of Experiment 2
-We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.
+We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.  This is in fact what we observe.  It is consistent with Hashem et al.'s findings.
 
+TODO: Add our own images here.
 ![There are usually a few cooperators.](images/exp2_fig1.png)
 ![The level of cooperators is noisy but low.](images/exp2_fig2.png)
 
