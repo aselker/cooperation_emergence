@@ -202,9 +202,11 @@ class BasicWorld:
         plt.yticks([])
         plt.title(f"World state on turn {self.curr_step}")
         plt.legend("Defector", "Cooperator")
-        red_patch = mpatches.Patch(color='red', label='Cooperator')
-        blue_patch = mpatches.Patch(color='blue', label='Defector')
-        plt.legend(handles=[red_patch, blue_patch], loc='center left', bbox_to_anchor=(1, 0.5))
+        red_patch = mpatches.Patch(color="red", label="Cooperator")
+        blue_patch = mpatches.Patch(color="blue", label="Defector")
+        plt.legend(
+            handles=[red_patch, blue_patch], loc="center left", bbox_to_anchor=(1, 0.5)
+        )
 
         return plt.imshow(array, **options)
 
@@ -321,7 +323,6 @@ class Agent:
                     self.strategy = Strategy.c
 
 
-
 if __name__ == "__main__":
     mutate_rate = 1e-2
     # world = BasicWorld(n=50, mutate_rate=mutate_rate, bounds=(17, 17, 22, 22), silent_coop=False)
@@ -350,8 +351,7 @@ if __name__ == "__main__":
     plt.xlabel("Time (steps)")
     plt.ylabel("Number of agents")
     plt.legend()
+    plt.show()
 
     file = f'{num}_timesteps_on_{datetime.datetime.now().strftime("%B %d %Y at %I:%M:%S%p")}.json'
     json.dump(stats, open("jsons/" + file, "w"), sort_keys=True, indent=4)
-
-    plt.show()
