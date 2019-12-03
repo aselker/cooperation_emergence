@@ -2,6 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 from time import sleep
 from IPython.display import clear_output
 from enum import Enum
@@ -187,7 +188,7 @@ class BasicWorld:
         n, m = array.shape
         options = underride(
             options,
-            cmap="binary",
+            cmap="bwr",
             alpha=0.7,
             vmin=0,
             vmax=1,
@@ -200,15 +201,19 @@ class BasicWorld:
         plt.xticks([])
         plt.yticks([])
         plt.title(f"World state on turn {self.curr_step}")
+        plt.legend("Defector", "Cooperator")
+        red_patch = mpatches.Patch(color='red', label='Cooperator')
+        blue_patch = mpatches.Patch(color='blue', label='Defector')
+        plt.legend(handles=[red_patch, blue_patch], loc='center left', bbox_to_anchor=(1, 0.5))
 
-        return plt.imshow(array/2, **options)
+        return plt.imshow(array, **options)
 
     def draw(self, interval=None, step=None):
         """
         Gets the current np array state then draws the array
         """
         arr = np.asarray(
-            [[agent.strategy.value for agent in row] for row in self.array]
+            [[agent.cooperate_p(self.curr_step) for agent in row] for row in self.array]
         )
         self.draw_array(arr)
 
@@ -314,6 +319,7 @@ class Agent:
             else:
                 if self.strategy == Strategy.d:
                     self.strategy = Strategy.c
+
 
 
 if __name__ == "__main__":
