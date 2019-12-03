@@ -64,7 +64,7 @@ Hashem et al. found that when the square of cooperators is smaller than 6x6, it 
 The results of our first experiment show that, while the system is not totally deterministic, groups of cooperators do seem to expand if they reach a critical size of around 5x5.  In contrast to Hashem et al., 5x5 clusters seem unstable; the other results are consistent with their findings.
 
 ### Experiment 2: Mutation
-Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.
+Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; no cell can mutate into it.
 
 #### Results of Experiment 2
 We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.  This is in fact what we observe.  It is consistent with Hashem et al.'s findings.
@@ -73,21 +73,15 @@ TODO: Add our own images here.
 ![There are usually a few cooperators.](images/exp2_fig1.png)
 ![The level of cooperators is noisy but low.](images/exp2_fig2.png)
 
-(Figures copied from the original paper)
-
 ### Experiment 3: Add silent-cooperator state
-For the third experiment, we explored the concept of a "silent-cooperator" gene/state that caused a cell to suddenly "become" a cooperator after a certain number of timesteps passed. When taking over a neighboring cell, the silent-cooperator gene would be passed on, with a small chance to mutate the gene if the original conqueror did not have it. The amount of time until the gene activates was exponentially distributed, with a mean of 200.
-
-
-The next part of the experiment involves adding a silent-cooperator “state” that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become “activate,” resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, resulting in clusters suddenly forming later on that are above the critical threshold for cooperator success.
+The third experiment involves adding a silent-cooperator allele that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become "activate," resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, resulting in clusters suddenly forming later on that are above the critical threshold for cooperator success.
 
 #### Results of Experiment 3
 For experiment 3, we expect there to be no cooperators at first, but when a group of cooperators appears that is large enough to be above the critical size, we expect to see them gradually take over the entire region as seen in the below image, taken from the original paper.
 
+TODO: Add our own images here.
 ![Eventually, silent cooperators take over.](images/exp3_fig1.png)
 ![Cooperators spread steadily until they fill the whole grid.](images/exp3_fig2.png)
-
-(Figures copied from the original paper)
 
 ### Experiment 4 (extension): Other Strategies
 The agents considered thus far only choose to cooperate or defect based on their own genome.  A broader array of strategies could be implemented, including:
