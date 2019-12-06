@@ -144,23 +144,29 @@ class BasicWorld:
         conquering_pairs = []  # Pairs of (conqueror, to_be_conquered)
         locs = [(x, y) for x in range(self.m) for y in range(self.m)]
         np.random.shuffle(locs)
-        for x, y in locs:
-            cells_to_compare = [
-                ((x - 1) % self.m, y),
-                ((x + 1) % self.m, y),
-                (x, (y - 1) % self.n),
-                (x, (y + 1) % self.n),
-            ]
-            look_loc = cells_to_compare[random.randint(0, 3)]
 
-            invader_val = arr[look_loc[0]][look_loc[1]]
-            curr_val = arr[x][y]
+        def nonce_func_1():
+            for x, y in locs:
+                cells_to_compare = [
+                    ((x - 1) % self.m, y),
+                    ((x + 1) % self.m, y),
+                    (x, (y - 1) % self.n),
+                    (x, (y + 1) % self.n),
+                ]
+                look_loc = cells_to_compare[
+                    random.getrandbits(2)
+                ]  # Faster than randint
 
-            if invader_val > curr_val:
-                if (
-                    invader_val - curr_val
-                ) / self.normalization_constant > np.random.rand(1, 1):
-                    conquering_pairs.append((look_loc, (x, y)))
+                invader_val = arr[look_loc[0]][look_loc[1]]
+                curr_val = arr[x][y]
+
+                if invader_val > curr_val:
+                    if (
+                        invader_val - curr_val
+                    ) / self.normalization_constant > np.random.rand(1, 1):
+                        conquering_pairs.append((look_loc, (x, y)))
+
+        nonce_func_1()
 
         # have conquering happen [update matrices/agents] -> mutation at odds mut_chance or whatever
         for x in conquering_pairs:
@@ -337,7 +343,8 @@ if __name__ == "__main__":
                 stats[key].append(value)
 
         if x % 1000 == 0:
-            # world.animate(1)
+        # if False:
+            world.animate(1)
             print(x / num * 100)
 
     world.animate(1)
