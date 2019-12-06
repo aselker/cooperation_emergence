@@ -30,7 +30,7 @@ The constant u is set to 0.09 in this simulation.  The PD is played against ever
 1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3
 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3
 ```
-Figure M: Cells play the PD against every other cell within 3 spaces, with varying weights.
+Figure 2: Cells play the PD against every other cell within 3 spaces, with varying weights.
 
  Each cell cooperates or defects according to its genome.  There are three "behavior" alleles: Cooperate (C), which always cooperates; Defect (D), which always defects; and Silent (S), which defects for a time and then begins to cooperate.  The "timer" that controls the transition is initialized (exponentially distributed, with a mean of 200 steps) when a cell mutates into the S strategy, and is passed on if it replicates.
 
@@ -43,10 +43,12 @@ Replication is controlled by fitness.  During each timestep, each cell plays the
 The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors.
 
 ![A 5x5 run of experiment 1 that survives](images/exp1_5x5_success.png)
-Figure 2: An example of experiment 1 where a 5x5 block of cooperators survives and dominates the system.
+
+Figure 3: An example of experiment 1 where a 5x5 block of cooperators survives and dominates the system.
 
 ![A 5x5 run of experiment 1 that dies](images/exp1_5x5_failure.png)
-Figure 3: An example of experiment 1 where a 5x5 block of cooperators dies off.
+
+Figure 4: An example of experiment 1 where a 5x5 block of cooperators dies off.
 
 #### Results of Experiment 1
 Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand.  In order to test our model's similarity, we test multiple times at a 5x5 grid, and find that the cooperators might survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks reliably die out, and 6x6 cooperator blocks reliably survive.
@@ -54,28 +56,33 @@ Hashem et al. found that when the square of cooperators is smaller than 6x6, it 
 The results of our first experiment show that, while the system is not totally deterministic, groups of cooperators do seem to expand if they reach a critical size of around 5x5.  In contrast to Hashem et al., 5x5 clusters seem unstable; the other results are consistent with their findings.
 
 ### Experiment 2: Mutation
-Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; no cell can mutate into it.
+Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; no cell can mutate into it. We used a mutation rate of 1e-4 as in the original paper for results published, but also ran tests at 1e-2 and 1e-3 and got the same results.
 
 #### Results of Experiment 2
-We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.  This is in fact what we observe.  It is consistent with Hashem et al.'s findings.
+We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.  This is in fact what we observe.  It is consistent with Hashem et al.'s findings. Below is a few snapshots of the world during its development.
 
 ![](images/exp2_t0.png)  
-Figure n: The starting state of the world.
+
+Figure 5: The starting state of the world.
 
 ![](images/exp2_t2001.png)  
-Figure n+1: The state of the world after 2001 steps. Cooperators are beginning to appear.
+
+Figure 6: The state of the world after 2001 steps. Cooperators are beginning to appear.
 
 ![](images/exp2_t8001.png)  
-Figure n+2: The state of the world after 8001 steps. Defectors still dominate.
 
-![](images/exp2_t10000.png) 
-Figure n+3: The state of the world after 10000 steps. As at step 8001, there are no cooperators alive.
+Figure 7: The state of the world after 8001 steps. Defectors still dominate.
 
-![](images/exp2_cells_over_time.png)  
-Figure n+4: The state of the world over time. The world is dominated by defectors, with cooperators providing only a bit of noise.
+![](images/exp2_t10000.png)
+
+Figure 8: The state of the world after 10000 steps. As at step 8001, there are no cooperators alive.
+
+![](images/exp2_cells_over_time.png)
+ 
+Figure 9: The state of the world over time. The world is dominated by defectors, with cooperators providing only a bit of noise.
 
 ### Experiment 3: Add silent-cooperator state
-The third experiment involves adding a silent-cooperator allele that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become "activate," resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, resulting in clusters suddenly forming later on that are above the critical threshold for cooperator success. Within the experiment, the amount of time before activation was exponentially distributed with a mean of 200 time steps. A sample run of the experiment can be seen in the below sampling of images at steps 1, 3001, and 10000.
+The third experiment involves adding a silent-cooperator allele that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become "activate," resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, resulting in clusters suddenly forming later on that are above the critical threshold for cooperator success. Within the experiment, the amount of time before activation was exponentially distributed with a mean of 200 time steps. A sample run of the experiment can be seen in the below sampling of images at steps 1, 1001, 3001, and 10000.
 
 ![](images/exp3_t0.png)  
 Figure n: The starting state of the world.

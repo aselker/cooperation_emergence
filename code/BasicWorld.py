@@ -12,16 +12,15 @@ import random
 import time
 import datetime
 import json
-
 """
+
 TODO:
-Nick -- Experiments 2/3
-
-Adam -- Graphing of type of person over time
+1) redo graphs on report (exp 2/3)
+2) Do ppt
+3) figure out extension and do
+4) re-edit paper including extension
 
 """
-
-
 class Strategy(Enum):
     c = 0
     d = 1
@@ -201,7 +200,6 @@ class BasicWorld:
         plt.xticks([])
         plt.yticks([])
         plt.title(f"World state on turn {self.curr_step}")
-        plt.legend("Defector", "Cooperator")
         red_patch = mpatches.Patch(color="red", label="Cooperator")
         blue_patch = mpatches.Patch(color="blue", label="Defector")
         plt.legend(
@@ -339,14 +337,17 @@ if __name__ == "__main__":
                 stats[key].append(value)
 
         if x % 1000 == 0:
-            world.animate(1)
+            # world.animate(1)
             print(x / num * 100)
 
     world.animate(1)
 
-    plt.plot(stats["time"], stats["num_c"], label="Cooperators")
-    plt.plot(stats["time"], stats["num_d"], label="Defectors")
-    plt.plot(stats["time"], stats["num_s"], label="Silents")
+    if max(stats["num_c"]) > 0:
+        plt.plot(stats["time"], stats["num_c"], label="Cooperators")
+    if max(stats["num_d"]) > 0:
+        plt.plot(stats["time"], stats["num_d"], label="Defectors")
+    if max(stats["num_s"]) > 0:
+        plt.plot(stats["time"], stats["num_s"], label="Silents")
 
     plt.xlabel("Time (steps)")
     plt.ylabel("Number of agents")
