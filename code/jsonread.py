@@ -1,4 +1,6 @@
+#!/usr/bin/env python3
 
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -12,14 +14,14 @@ import datetime
 import json
 import os
 
-stats = json.load(open('jsons/100000_timesteps_on_December 10 2019 at 11:48:20AM.json'))
+stats = json.load(open(sys.argv[1]))
 
 if max(stats["num_c"]) > 0:
-	plt.plot(stats["time"], stats["num_c"], label="Cooperators")
+    plt.plot(stats["time"], stats["num_c"], label="Cooperators")
 if max(stats["num_d"]) > 0:
-	plt.plot(stats["time"], stats["num_d"], label="Defectors")
+    plt.plot(stats["time"], stats["num_d"], label="Defectors")
 if max(stats["num_s"]) > 0:
-	plt.plot(stats["time"], stats["num_s"], label="Silents")
+    plt.plot(stats["time"], stats["num_s"], label="Silents")
 # if max(stats["num_t"]) > 0:
 # 	plt.plot(stats["time"], stats["num_t"], label="Tit-For-Tats")
 

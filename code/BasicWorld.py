@@ -403,10 +403,14 @@ if __name__ == "__main__":
 
         if x % 1000 == 0:
             # if False:
-            world.animate(1)
+            world.draw()
+            plt.savefig(f"t{x}.png")
+            plt.clf()
             print(x / num * 100)
 
-    world.animate(1)
+    world.draw()
+    plt.savefig(f"t{x}.png")
+    plt.clf()
 
     if max(stats["num_c"]) > 0:
         plt.plot(stats["time"], stats["num_c"], label="Cooperators")
@@ -420,7 +424,7 @@ if __name__ == "__main__":
     plt.xlabel("Time (steps)")
     plt.ylabel("Number of agents")
     plt.legend()
-    plt.show()
+    plt.savefig("agents_over_time.png")
 
     jsons = "jsons/"
     file = f'{num}_timesteps_on_{datetime.datetime.now().strftime("%B %d %Y at %I:%M:%S%p")}.json'
