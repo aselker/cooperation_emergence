@@ -47,8 +47,8 @@ class Strategy(Enum):
 
 
 colors = {
-    Strategy.c: [0, 0, 1.0],
-    Strategy.d: [1.0, 0, 0],
+    Strategy.c: [1.0, 0, 0],
+    Strategy.d: [0, 0, 1.0],
     (Strategy.s, 0): [0.9, 0, 0.1],
     (Strategy.s, 1): [0.1, 0, 0.9],
     Strategy.t: [0, 1.0, 0],
@@ -368,7 +368,7 @@ class Agent:
 if __name__ == "__main__":
     mutate_rate = 1e-2
     world = BasicWorld(
-        n=50, do_mutation=False, bounds=(17, 17, 22, 22), silent_coop=False
+        n=50, do_mutation=False, bounds=(17, 17, 23, 23), silent_coop=False
     )
     # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
 
