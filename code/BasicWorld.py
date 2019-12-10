@@ -13,7 +13,7 @@ import datetime
 import json
 import os
 
-u = 0.09
+
 kernel = np.array(
     [
         [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
@@ -25,6 +25,16 @@ kernel = np.array(
         [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
     ]
 )
+
+"""
+Normalized payoff matrix (for first player):
+D/D: 0
+D/C: 1
+C/D: -u
+C/C: 1-u
+"""
+
+u = 0.09
 total_interactions = np.sum(kernel)
 kernel[3][3] = -u * total_interactions
 
@@ -39,9 +49,9 @@ class Strategy(Enum):
 colors = {
     Strategy.c: [1.0, 0, 0],
     Strategy.d: [0, 0, 1.0],
-    (Strategy.s, 0): [0.2, 0, 0.8],
-    (Strategy.s, 1): [0.8, 0, 0.2],
-    Strategy.t: [0, 1.0, 0],
+    (Strategy.s, 0): [0, 1.0, 1.0],
+    (Strategy.s, 1): [1.0, 1.0, 0],
+    Strategy.t: [0, 1.0, 0.0],
 }
 
 
@@ -116,7 +126,7 @@ class BasicWorld:
 
         pd_results = correlate2d(coop_array, kernel, mode="same", boundary="wrap")
 
-        frac_coop = (pd_results - (coop_array * kernel[2][2])) / total_interactions
+        frac_coop = (pd_results - (coop_array * kernel[3][3])) / total_interactions
         for i, row in enumerate(self.array):
             for j, agent in enumerate(row):
                 agent.add_memory(frac_coop[i, j])
@@ -219,8 +229,8 @@ class BasicWorld:
         patches = [
             mpatches.Patch(color=colors[Strategy.c], label="Cooperator"),
             mpatches.Patch(color=colors[Strategy.d], label="Defector"),
-            mpatches.Patch(color=colors[(Strategy.s, 0)], label="Silent (defecting)"),
             mpatches.Patch(color=colors[(Strategy.s, 1)], label="Silent (cooperating)"),
+            mpatches.Patch(color=colors[(Strategy.s, 0)], label="Silent (defecting)"),
             mpatches.Patch(color=colors[Strategy.t], label="Tit-For-Tat"),
         ]
         plt.legend(handles=patches, loc="center left", bbox_to_anchor=(1, 0.5))
@@ -369,7 +379,7 @@ if __name__ == "__main__":
     # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
 
     # Experiment 3:
-    mutate_rate = 1e-2
+    mutate_rate = 4e-2
     num = 10000
     world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
@@ -391,8 +401,8 @@ if __name__ == "__main__":
             else:
                 stats[key].append(value)
 
-        # if x % 1000 == 0:
-        if False:
+        if x % 1000 == 0:
+            # if False:
             world.animate(1)
             print(x / num * 100)
 

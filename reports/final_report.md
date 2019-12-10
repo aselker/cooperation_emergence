@@ -14,8 +14,8 @@ The second factor is the Prisoner's Dilemma (PD) games which the cells play agai
 
 |   | A Cooperator   | A Defector |
 |---|---|---|
-| B Cooperator | 1 | 1 + u |
-| B Defector | 0 | u |
+| B Cooperator | 1 - u | 1 |
+| B Defector | -u | 0 |
 
 Figure 1: Prisoner's Dilemma payoff matrix for A
 
