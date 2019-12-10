@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import numpy as np
+from itertools import starmap
+import multiprocessing as mp
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from time import sleep
@@ -40,6 +42,27 @@ def underride(d, **options):
     return d
 
 
+def test_conquering(arr, loc, m, n, norm_const):
+    # TODO: Reinitialize randomness?
+    x, y = loc
+    cells_to_compare = [
+        ((x - 1) % m, y),
+        ((x + 1) % m, y),
+        (x, (y - 1) % n),
+        (x, (y + 1) % n),
+    ]
+    look_loc = cells_to_compare[random.getrandbits(2)]  # Faster than randint
+
+    invader_val = arr[look_loc[0]][look_loc[1]]
+    curr_val = arr[x][y]
+
+    if invader_val > curr_val:
+        if (invader_val - curr_val) / norm_const > np.random.rand(1, 1):
+            return (look_loc, (x, y))
+        else:
+            return None
+
+
 class BasicWorld:
     def __init__(
         self,
@@ -65,6 +88,8 @@ class BasicWorld:
                     return Agent(strategy=Strategy.c, silent_coop=silent_coop)
                 else:
                     return Agent(silent_coop=silent_coop)
+
+        self.pool = mp.Pool()
 
         self.curr_step = 0
 
@@ -142,32 +167,21 @@ class BasicWorld:
         # we compare fitnesses. If our current cell is higher, do nothing.
         # If our current cell has lower fitness we can be replaced with the other cell
 
-        conquering_pairs = []  # Pairs of (conqueror, to_be_conquered)
         locs = [(x, y) for x in range(self.m) for y in range(self.m)]
         np.random.shuffle(locs)
 
-        def nonce_func_1():
-            for x, y in locs:
-                cells_to_compare = [
-                    ((x - 1) % self.m, y),
-                    ((x + 1) % self.m, y),
-                    (x, (y - 1) % self.n),
-                    (x, (y + 1) % self.n),
-                ]
-                look_loc = cells_to_compare[
-                    random.getrandbits(2)
-                ]  # Faster than randint
+        # conquering_pairs = [
+        # test_conquering(arr, loc, self.m, self.n, self.normalization_constant)
+        # for loc in locs
+        # ]
 
-                invader_val = arr[look_loc[0]][look_loc[1]]
-                curr_val = arr[x][y]
+        # f = lambda loc: test_conquering(
+        # arr, loc, self.m, self.n, self.normalization_constant
+        # )
+        args = [[arr, loc, self.m, self.n, self.normalization_constant] for loc in locs]
+        conquering_pairs = self.pool.starmap(test_conquering, args)
 
-                if invader_val > curr_val:
-                    if (
-                        invader_val - curr_val
-                    ) / self.normalization_constant > np.random.rand(1, 1):
-                        conquering_pairs.append((look_loc, (x, y)))
-
-        nonce_func_1()
+        conquering_pairs = [p for p in conquering_pairs if not (p is None)]
 
         # have conquering happen [update matrices/agents] -> mutation at odds mut_chance or whatever
         for x in conquering_pairs:
@@ -335,7 +349,7 @@ if __name__ == "__main__":
     world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": []}
-    num = 10000
+    num = 1000
     for x in range(num):
         world.step()
         for key, value in world.get_stats().items():
@@ -349,16 +363,17 @@ if __name__ == "__main__":
             world.animate(1)
             print(x / num * 100)
 
-    world.animate(1)
+    if True:
+        world.animate(1)
 
-    plt.plot(stats["time"], stats["num_c"], label="Cooperators")
-    plt.plot(stats["time"], stats["num_d"], label="Defectors")
-    plt.plot(stats["time"], stats["num_s"], label="Silents")
+        plt.plot(stats["time"], stats["num_c"], label="Cooperators")
+        plt.plot(stats["time"], stats["num_d"], label="Defectors")
+        plt.plot(stats["time"], stats["num_s"], label="Silents")
 
-    plt.xlabel("Time (steps)")
-    plt.ylabel("Number of agents")
-    plt.legend()
-    plt.show()
+        plt.xlabel("Time (steps)")
+        plt.ylabel("Number of agents")
+        plt.legend()
+        plt.show()
 
-    file = f'{num}_timesteps_on_{datetime.datetime.now().strftime("%B %d %Y at %I:%M:%S%p")}.json'
-    json.dump(stats, open("jsons/" + file, "w"), sort_keys=True, indent=4)
+        file = f'{num}_timesteps_on_{datetime.datetime.now().strftime("%B %d %Y at %I:%M:%S%p")}.json'
+        json.dump(stats, open("jsons/" + file, "w"), sort_keys=True, indent=4)
