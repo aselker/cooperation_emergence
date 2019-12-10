@@ -2,7 +2,7 @@
 Adam Selker & Nick Sherman
 
 ## Abstract
-Cooperation in a species seems counterintuitive to the idea of "survival of the fittest," as although cooperation as a whole can help a species, greediness can help an individual more. Our aim was to explore possible ways that cooperation appears in a population, in order to better understand how it may begin and how it could overcome greedy strategies for survival. In order to understand this, we simulate a variety of ways that cooperation could emerge in bacterial colonies on a biofilm, as seen in Hashem et al. Through this research, we determined that cooperation can successfully emerge through such strategies as a "silent cooperator" gene and [something].
+Cooperation in a species seems counterintuitive to the idea of "survival of the fittest," as although cooperation as a whole can help a species, greediness can help an individual more. Our aim was to explore possible ways that cooperation appears in a population, in order to better understand how it may begin and how it could overcome greedy strategies for survival. In order to understand this, we simulate a variety of ways that cooperation could emerge in bacterial colonies on a biofilm, as seen in Hashem et al. Through this research, we determined that cooperation can successfully emerge through such strategies as a "silent cooperator" gene or through a "tit-for-tat" strategy, where cells will cooperate with neighbors that cooperated or defect with those who defect.
 
 
 ## Overview
@@ -56,10 +56,10 @@ Hashem et al. found that when the square of cooperators is smaller than 6x6, it 
 The results of our first experiment show that, while the system is not totally deterministic, groups of cooperators do seem to expand if they reach a critical size of around 5x5.  In contrast to Hashem et al., 5x5 clusters seem unstable; the other results are consistent with their findings.
 
 ### Experiment 2: Mutation
-Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; no cell can mutate into it. We used a mutation rate of 1e-4 as in the original paper for results published, but also ran tests at 1e-2 and 1e-3 and got the same results.
+Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; all cells become regular cooperators when mutating. We use a mutation rate of 1e-4 as in the original paper for results published, but also ran tests at 1e-2 and 1e-3.
 
 #### Results of Experiment 2
-We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.  This is in fact what we observe.  It is consistent with Hashem et al.'s findings. Below is a few snapshots of the world during its development.
+We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.  This is in fact what we observe.  It is consistent with Hashem et al.'s findings. We also confirmed these results for mutation rates of 1e-2 and 1e-3. Below is a few snapshots of the world during its development.
 
 ![](images/exp2_t0.png)  
 
@@ -139,11 +139,8 @@ Small islands of cooperators in a sea of defectors tend to die out, but larger c
 
 I. Hashem, D. Telen, P. Nimmegeers, and J. Van Impe, “The Silent Cooperator: An Epigenetic Model for Emergence of Altruistic Traits in Biological Systems,” _Complexity_, vol. 2018, Article ID 2082037, 16 pages, 2018. https://doi.org/10.1155/2018/2082037.
 
-### Other_source
-http://www.math.harvard.edu/archive/153_fall_04/Additional_reading_material/spatial_dilemmas_of_evolution.pdf
-
 
 
 ## Where's our work?
 
-Curious in checking out what we did? You can find our repository at ___________ or use our online notebooke through ___________.
+Curious in checking out what we did? You can find our repository at https://github.com/aselker/cooperation_emergence/ or use our online notebook located at ___________.
