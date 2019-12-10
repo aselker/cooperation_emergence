@@ -46,6 +46,15 @@ class Strategy(Enum):
     t = 3
 
 
+colors = {
+    Strategy.c: [0, 0, 1.0],
+    Strategy.d: [1.0, 0, 0],
+    (Strategy.s, 0): [0.9, 0, 0.1],
+    (Strategy.s, 1): [0.1, 0, 0.9],
+    Strategy.t: [0, 1.0, 0],
+}
+
+
 def underride(d, **options):
     """Add key-value pairs to d only if key is not in d.
 
@@ -79,7 +88,8 @@ class BasicWorld:
                 return Agent(silent_coop=silent_coop)
             else:
                 if (bounds[0] < x < bounds[2]) and (bounds[1] < y < bounds[3]):
-                    return Agent(strategy=Strategy.c, silent_coop=silent_coop)
+                    # return Agent(strategy=Strategy.c, silent_coop=silent_coop)
+                    return Agent(strategy=Strategy.t, silent_coop=silent_coop)
                 else:
                     return Agent(silent_coop=silent_coop)
 
@@ -117,9 +127,9 @@ class BasicWorld:
         pd_results = correlate2d(coop_array, kernel, mode="same", boundary="wrap")
 
         frac_coop = (pd_results - (coop_array * kernel[2][2])) / total_interactions
-        for row in self.array:
-            for agent in row:
-                agent.add_memory(frac_coop)
+        for i, row in enumerate(self.array):
+            for j, agent in enumerate(row):
+                agent.add_memory(frac_coop[i, j])
 
         return pd_results
 
@@ -200,11 +210,11 @@ class BasicWorld:
 
     def draw_array(self, array, **options):
         """Draws the cells."""
-        n, m = array.shape
+        n, m, _ = array.shape
         options = underride(
             options,
-            cmap="bwr",
-            alpha=0.7,
+            # cmap="bwr",
+            alpha=1,
             vmin=0,
             vmax=1,
             interpolation="none",
@@ -216,10 +226,13 @@ class BasicWorld:
         plt.xticks([])
         plt.yticks([])
         plt.title(f"World state on turn {self.curr_step}")
-        red_patch = mpatches.Patch(color="red", label="Cooperator")
-        blue_patch = mpatches.Patch(color="blue", label="Defector")
+        red_patch = mpatches.Patch(color=colors[Strategy.c], label="Cooperator")
+        blue_patch = mpatches.Patch(color=colors[Strategy.d], label="Defector")
+        green_patch = mpatches.Patch(color=colors[Strategy.t], label="Tit-For-Tat")
         plt.legend(
-            handles=[red_patch, blue_patch], loc="center left", bbox_to_anchor=(1, 0.5)
+            handles=[red_patch, blue_patch, green_patch],
+            loc="center left",
+            bbox_to_anchor=(1, 0.5),
         )
 
         return plt.imshow(array, **options)
@@ -228,9 +241,17 @@ class BasicWorld:
         """
         Gets the current np array state then draws the array
         """
+
+        def agent_to_color(agent):
+            if agent.strategy == Strategy.s:
+                return colors[(Strategy.s, agent.cooperate_p(self.curr_step))]
+            else:
+                return colors[agent.strategy]
+
         arr = np.asarray(
-            [[agent.cooperate_p(self.curr_step) for agent in row] for row in self.array]
+            [[agent_to_color(agent) for agent in row] for row in self.array]
         )
+
         self.draw_array(arr)
 
     def animate(self, frames, interval=None, skip=0, step=None):
@@ -346,8 +367,10 @@ class Agent:
 
 if __name__ == "__main__":
     mutate_rate = 1e-2
-    # world = BasicWorld(n=50, mutate_rate=mutate_rate, bounds=(17, 17, 22, 22), silent_coop=False)
-    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+    world = BasicWorld(
+        n=50, do_mutation=False, bounds=(17, 17, 22, 22), silent_coop=False
+    )
+    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": [], "num_t": []}
     num = 10000
@@ -372,6 +395,8 @@ if __name__ == "__main__":
         plt.plot(stats["time"], stats["num_d"], label="Defectors")
     if max(stats["num_s"]) > 0:
         plt.plot(stats["time"], stats["num_s"], label="Silents")
+    if max(stats["num_t"]) > 0:
+        plt.plot(stats["time"], stats["num_t"], label="Tit-For-Tats")
 
     plt.xlabel("Time (steps)")
     plt.ylabel("Number of agents")
