@@ -26,7 +26,7 @@ kernel = np.array(
     ]
 )
 total_interactions = np.sum(kernel)
-kernel[2][2] = -u * total_interactions
+kernel[3][3] = -u * total_interactions
 
 
 class Strategy(Enum):
@@ -39,8 +39,8 @@ class Strategy(Enum):
 colors = {
     Strategy.c: [1.0, 0, 0],
     Strategy.d: [0, 0, 1.0],
-    (Strategy.s, 0): [0.1, 0, 0.9],
-    (Strategy.s, 1): [0.9, 0, 0.1],
+    (Strategy.s, 0): [0.2, 0, 0.8],
+    (Strategy.s, 1): [0.8, 0, 0.2],
     Strategy.t: [0, 1.0, 0],
 }
 
@@ -216,14 +216,14 @@ class BasicWorld:
         plt.xticks([])
         plt.yticks([])
         plt.title(f"World state on turn {self.curr_step}")
-        red_patch = mpatches.Patch(color=colors[Strategy.c], label="Cooperator")
-        blue_patch = mpatches.Patch(color=colors[Strategy.d], label="Defector")
-        green_patch = mpatches.Patch(color=colors[Strategy.t], label="Tit-For-Tat")
-        plt.legend(
-            handles=[red_patch, blue_patch, green_patch],
-            loc="center left",
-            bbox_to_anchor=(1, 0.5),
-        )
+        patches = [
+            mpatches.Patch(color=colors[Strategy.c], label="Cooperator"),
+            mpatches.Patch(color=colors[Strategy.d], label="Defector"),
+            mpatches.Patch(color=colors[(Strategy.s, 0)], label="Silent (defecting)"),
+            mpatches.Patch(color=colors[(Strategy.s, 1)], label="Silent (cooperating)"),
+            mpatches.Patch(color=colors[Strategy.t], label="Tit-For-Tat"),
+        ]
+        plt.legend(handles=patches, loc="center left", bbox_to_anchor=(1, 0.5))
 
         return plt.imshow(array, **options)
 
@@ -392,8 +392,8 @@ if __name__ == "__main__":
             else:
                 stats[key].append(value)
 
-        if x % 1000 == 0:
-            # if False:
+        # if x % 1000 == 0:
+        if False:
             world.animate(1)
             print(x / num * 100)
 
