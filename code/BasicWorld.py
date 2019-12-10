@@ -12,6 +12,7 @@ import random
 import time
 import datetime
 import json
+
 """
 
 TODO:
@@ -21,6 +22,22 @@ TODO:
 4) re-edit paper including extension
 
 """
+
+u = 0.09
+kernel = np.array(
+    [
+        [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
+        [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
+        [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
+        [1 / 3, 1 / 2, 1, 0, 1, 1 / 2, 1 / 3],
+        [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
+        [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
+        [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
+    ]
+)
+kernel[2][2] = -u * np.sum(kernel)
+
+
 class Strategy(Enum):
     c = 0
     d = 1
@@ -44,7 +61,6 @@ class BasicWorld:
         self,
         n=50,
         m=None,
-        u=0.09,
         do_mutation=False,
         do_silent=False,
         bounds=None,
@@ -78,23 +94,9 @@ class BasicWorld:
             [agent_at_pos(x, y) for x in range(self.m)] for y in range(self.n)
         ]
 
-        self.u = u
-        self.kernel = np.array(
-            [
-                [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
-                [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
-                [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
-                [1 / 3, 1 / 2, 1, 0, 1, 1 / 2, 1 / 3],
-                [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
-                [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
-                [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
-            ]
-        )
-        self.kernel[2][2] = -u * np.sum(self.kernel)
-
         self.inherent_fitness_increment_prob = 0.001
         self.inherent_fitness_increment_amt = 0.1
-        self.normalization_constant = 24 * (1 + self.u)
+        self.normalization_constant = 24 * (1 + u)
 
     def make_pd_results(self):
         """
@@ -110,7 +112,13 @@ class BasicWorld:
             ]
         )
 
-        pd_results = correlate2d(coop_array, self.kernel, mode="same", boundary="wrap")
+        pd_results = correlate2d(coop_array, kernel, mode="same", boundary="wrap")
+
+        coop_benefit = pd_results - (coop_array * kernel[2][2])
+        for row in self.array:
+            for agent in row:
+                agent.add_memory(coop_benefit)
+
         return pd_results
 
     def make_fitness_array(self):
@@ -326,6 +334,9 @@ class Agent:
                 if self.strategy == Strategy.d:
                     self.strategy = Strategy.c
 
+    def add_memory(self, coop_benefit):
+        self.memory = coop_benefit
+
 
 if __name__ == "__main__":
     mutate_rate = 1e-2
@@ -343,7 +354,7 @@ if __name__ == "__main__":
                 stats[key].append(value)
 
         if x % 1000 == 0:
-        # if False:
+            # if False:
             world.animate(1)
             print(x / num * 100)
 
