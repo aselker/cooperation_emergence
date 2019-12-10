@@ -88,8 +88,8 @@ class BasicWorld:
                 return Agent(silent_coop=silent_coop)
             else:
                 if (bounds[0] < x < bounds[2]) and (bounds[1] < y < bounds[3]):
-                    # return Agent(strategy=Strategy.c, silent_coop=silent_coop)
-                    return Agent(strategy=Strategy.t, silent_coop=silent_coop)
+                    return Agent(strategy=Strategy.c, silent_coop=silent_coop)
+                    # return Agent(strategy=Strategy.t, silent_coop=silent_coop)
                 else:
                     return Agent(silent_coop=silent_coop)
 
@@ -366,30 +366,29 @@ class Agent:
 
 
 if __name__ == "__main__":
-    mutate_rate = 1e-4
-    num = 1
     # Experiment 1:
     # mutate_rate = 0
-    # num = 10000
+    # num = 100000
     # world = BasicWorld(n=50, bounds=[17,17,22,22], mutate_rate=mutate_rate, silent_coop=False)
 
     # Experiment 2:
-    # mutate_rate = 1e-2
-    # num = 10000
-    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
+    mutate_rate = 1e-4
+    num = 100000
+    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
 
     # Experiment 3:
-    mutate_rate = 4e-2
-    num = 10000
-    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+    # mutate_rate = 4e-2
+    # num = 100000
+    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
     # Experiment 4:
     # mutate_rate = 1e-4
     # num = 100000
+    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
     # Experiment 5:
-    # mutate_rate = 1e-2
-    # num = 10000
+    # mutate_rate = 0
+    # num = 100000
     # world = BasicWorld(n=50, do_mutation=False, bounds=(17, 17, 23, 23), silent_coop=False)
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": [], "num_t": []}
