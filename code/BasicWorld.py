@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from time import sleep
-from IPython.display import clear_output
 from enum import Enum
 import copy
 from scipy.signal import correlate2d
@@ -12,15 +11,12 @@ import random
 import time
 import datetime
 import json
+import os
+
 
 """
-
 TODO:
-1) redo graphs on report (exp 2/3)
-2) Do ppt
-3) figure out extension and do
-4) re-edit paper including extension
-
+0) re-edit paper including extension
 """
 
 u = 0.09
@@ -56,15 +52,15 @@ colors = {
 
 
 def underride(d, **options):
-    """Add key-value pairs to d only if key is not in d.
+	"""Add key-value pairs to d only if key is not in d.
 
-    d: dictionary
-    options: keyword args to add to d
-    """
-    for key, val in options.items():
-        d.setdefault(key, val)
+	d: dictionary
+	options: keyword args to add to d
+	"""
+	for key, val in options.items():
+		d.setdefault(key, val)
 
-    return d
+	return d
 
 
 class BasicWorld:
@@ -361,6 +357,7 @@ class Agent:
                 if self.strategy == Strategy.d:
                     self.strategy = Strategy.c
 
+
     def add_memory(self, frac_coop):
         self.memory = frac_coop
 
@@ -405,3 +402,9 @@ if __name__ == "__main__":
 
     file = f'{num}_timesteps_on_{datetime.datetime.now().strftime("%B %d %Y at %I:%M:%S%p")}.json'
     json.dump(stats, open("jsons/" + file, "w"), sort_keys=True, indent=4)
+
+	jsons = "jsons/"
+	file = f'{num}_timesteps_on_{datetime.datetime.now().strftime("%B %d %Y at %I:%M:%S%p")}.json'
+	if not os.path.isdir(jsons):
+		os.mkdir(jsons)
+	json.dump(stats, open(jsons + file, "w"), sort_keys=True, indent=4)
