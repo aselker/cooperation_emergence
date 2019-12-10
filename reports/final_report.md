@@ -19,7 +19,7 @@ The second factor is the Prisoner's Dilemma (PD) games which the cells play agai
 
 Figure 1: Prisoner's Dilemma payoff matrix for A
 
-The constant u is set to 0.09 in this simulation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in figure M.
+The constant u is set to 0.09 in this simulation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in figure 2.
 
 ```
 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3
@@ -56,7 +56,7 @@ Hashem et al. found that when the square of cooperators is smaller than 6x6, it 
 The results of our first experiment show that, while the system is not totally deterministic, groups of cooperators do seem to expand if they reach a critical size of around 5x5.  In contrast to Hashem et al., 5x5 clusters seem unstable; the other results are consistent with their findings.
 
 ### Experiment 2: Mutation
-Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; all cells become regular cooperators when mutating. We use a mutation rate of 1e-4 as in the original paper for results published, but also ran tests at 1e-2 and 1e-3.
+Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; all cells become regular cooperators when mutating. We use a mutation rate of 1e-4 as in the original paper for results published, but also ran tests at 1e-2 and 1e-3.  Because of limited computational resources, we only ran the simulations for 10,000 steps, rather than the 100,000 steps used in the original paper.
 
 #### Results of Experiment 2
 We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.  This is in fact what we observe.  It is consistent with Hashem et al.'s findings. We also confirmed these results for mutation rates of 1e-2 and 1e-3. Below is a few snapshots of the world during its development.
@@ -104,16 +104,34 @@ Experiment 3 proves that cooperation can appear in a population of defectors if 
 Figure 14: The state of the world over time. Original "cooperators" do not exist.
 
 ### Experiment 4: Environment comparison to original paper
-For most of our experiments, we did not have the compute power to run a direct comparison to the original Hashem et al. paper. Therefore, wee utilized Olin College's supercomputer (Deepmind) to run a full-scale experiment 3, using the original paper's 1e-4 mutation rate and 100,000 timesteps.
+For most of our experiments, we did not have the compute power to run a direct comparison to the original Hashem et al. paper. Therefore, we used Olin College's supercomputer (Deepmind) to run a full-scale experiment 3, using the original paper's 1e-4 mutation rate and 100,000 timesteps.
 
 #### Results of Experiment 4
-We found that ________ (Adam)
+We found that [something].
 
 ### Experiment 5: Simplified Tit for Tat Strategy
-The strategies that cells follow in previous experiments are relatively simple, either exclusively cooperating, defecting, or waiting until a certain time step to cooperate. Although compute limitations were still in-place, an exploration of a more complex strategy was in order. A simplified version of the "Tit for Tat" strategy, where a cell copies the strategy its neighbor used last time step, is an interesting exploration to see how a cell with a changing strategy survives. In order to simplify the strategy, we have an aggregate count: if at least 40% of a cell's neighbors cooperated last time step, then it will also cooperate. The results of the trial can be found below.
+The strategies that cells follow in previous experiments are relatively simple, either exclusively cooperating, defecting, or waiting until a certain time step to cooperate. Although computational limitations were still in place, an exploration of a more complex strategy was in order. One common strategy that is successful in Prisoner's Dilemma tournaments is the tit-for-tat strategy, which takes the same action that its opponent took in the last round. In this simulation, the PD is played against multiple opponents at the same time, so we used a weighted average of opponents' actions (weighted by the same grid used in the PD payouts; see Fig. 2).  If more than 40% of opponents defected, the cell would defect.  Otherwise, it could cooperate.
+
+As in Experiment 1, this experiment started with a 5x5 block of tit-for-tat players, with the rest of the grid full of defectors.
 
 #### Results of Experiment 5
-It was found that a simplified tit for tat strategy could not survive in the world we created due to an overwhelming majority of cells being defectors. Due to this, even if a central square of TFT cells exists at the start of an experiment, the outside cells will become defectors, causing the change to propagate inwardly until all TFT cells are defectors.
+
+The tit-for-tat players did not survive or propagate.
+
+
+![](images/exp5/t1.png)  
+Figure 15: The starting state of the world.
+
+![](images/exp5/t1001.png)  
+Figure 16: By 1000 steps, the tit-for-tat players are beginning to die out.
+
+![](images/exp5/t3001.png)  
+Figure 17: By 3000 steps, the tit-for-tat players are extinct.
+
+![](images/exp5/cells_over_time.png)  
+Figure 18: The state of the world over time.  Defectors dominate.
+
+This is probably because of how the tit-for-tat players choose their actions.  The cells on the corners of the block are exposed to more defectors than fellow tit-for-tat players; regardless of the other tit-for-tat cells' actions, those cells will feel more defection than cooperation, and will therefore begin to defect.  This will "spread" inward until all of the cells are defecting, leaving the tit-for-tat players as nothing but ordinary defectors.
 
 
 ## Interpretation
