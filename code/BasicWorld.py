@@ -73,7 +73,6 @@ class BasicWorld:
         n=50,
         m=None,
         do_mutation=False,
-        do_silent=False,
         bounds=None,
         box_is_tft=False,
         mutate_rate=0,
@@ -109,6 +108,7 @@ class BasicWorld:
             [agent_at_pos(x, y) for x in range(self.m)] for y in range(self.n)
         ]
 
+        self.silent_coop = False
         self.inherent_fitness_increment_prob = 0.001
         self.inherent_fitness_increment_amt = 0.1
         self.normalization_constant = 24 * (1 + u)
@@ -168,28 +168,23 @@ class BasicWorld:
         locs = [(x, y) for x in range(self.m) for y in range(self.m)]
         np.random.shuffle(locs)
 
-        def nonce_func_1():
-            for x, y in locs:
-                cells_to_compare = [
-                    ((x - 1) % self.m, y),
-                    ((x + 1) % self.m, y),
-                    (x, (y - 1) % self.n),
-                    (x, (y + 1) % self.n),
-                ]
-                look_loc = cells_to_compare[
-                    random.getrandbits(2)
-                ]  # Faster than randint
+        for x, y in locs:
+            cells_to_compare = [
+                ((x - 1) % self.m, y),
+                ((x + 1) % self.m, y),
+                (x, (y - 1) % self.n),
+                (x, (y + 1) % self.n),
+            ]
+            look_loc = cells_to_compare[random.getrandbits(2)]  # Faster than randint
 
-                invader_val = arr[look_loc[0]][look_loc[1]]
-                curr_val = arr[x][y]
+            invader_val = arr[look_loc[0]][look_loc[1]]
+            curr_val = arr[x][y]
 
-                if invader_val > curr_val:
-                    if (
-                        invader_val - curr_val
-                    ) / self.normalization_constant > np.random.rand(1, 1):
-                        conquering_pairs.append((look_loc, (x, y)))
-
-        nonce_func_1()
+            if invader_val > curr_val:
+                if (
+                    invader_val - curr_val
+                ) / self.normalization_constant > np.random.rand(1, 1):
+                    conquering_pairs.append((look_loc, (x, y)))
 
         # have conquering happen [update matrices/agents] -> mutation at odds mut_chance or whatever
         for x in conquering_pairs:
@@ -202,10 +197,11 @@ class BasicWorld:
                 mutate_rate=self.mutate_rate, curr_step=self.curr_step
             )
 
-        # Increment random inherent_fitness vars
-        for agent in [agent for row in self.array for agent in row]:
-            if np.random.random() < self.inherent_fitness_increment_prob:
-                agent.inherent_fitness += self.inherent_fitness_increment_amt
+        if self.silent_coop:
+            # Increment random inherent_fitness vars
+            for agent in [agent for row in self.array for agent in row]:
+                if np.random.random() < self.inherent_fitness_increment_prob:
+                    agent.inherent_fitness += self.inherent_fitness_increment_amt
 
         self.curr_step += 1
 
