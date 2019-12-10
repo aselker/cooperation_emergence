@@ -48,9 +48,9 @@ colors = {
 def underride(d, **options):
     """Add key-value pairs to d only if key is not in d.
 
-	d: dictionary
-	options: keyword args to add to d
-	"""
+    d: dictionary
+    options: keyword args to add to d
+    """
     for key, val in options.items():
         d.setdefault(key, val)
 
@@ -69,9 +69,9 @@ class BasicWorld:
         silent_coop=False,
     ):
         """
-		bounds is a tuple of (x_start, y_start, x_end, y_end) for a block of
-		cooperators among the sea of defectors.
-		"""
+        bounds is a tuple of (x_start, y_start, x_end, y_end) for a block of
+        cooperators among the sea of defectors.
+        """
 
         def agent_at_pos(x, y):
             if bounds is None:
@@ -102,11 +102,11 @@ class BasicWorld:
 
     def make_pd_results(self):
         """
-		Makes an n x m array, where elements are the fitnesses that agents get
-		from playing the PD, both from defecting and from having others
-		cooperate with them.  Boundary conditions are periodic, i.e. agents at
-		the far left play against agents at the far right.
-		"""
+        Makes an n x m array, where elements are the fitnesses that agents get
+        from playing the PD, both from defecting and from having others
+        cooperate with them.  Boundary conditions are periodic, i.e. agents at
+        the far left play against agents at the far right.
+        """
         coop_array = np.array(
             [
                 [1 if agent.cooperate_p(self.curr_step) else 0 for agent in row]
@@ -125,9 +125,9 @@ class BasicWorld:
 
     def make_fitness_array(self):
         """
-		Makes an n x m array, where each element is that agent's fitness,
-		derived from its and others' behaviors and their inherent fitnesses.
-		"""
+        Makes an n x m array, where each element is that agent's fitness,
+        derived from its and others' behaviors and their inherent fitnesses.
+        """
         inherent_fitnesses = np.array(
             [[agent.inherent_fitness for agent in row] for row in self.array]
         )
@@ -136,11 +136,11 @@ class BasicWorld:
 
     def step(self):
         """
-		Runs a step of the simulation.
-		* Calculate fitness of each agent
-		* Figure out who conquers whom, and let them conquer
-		* Randomly increment inherent fitnesses
-		"""
+        Runs a step of the simulation.
+        * Calculate fitness of each agent
+        * Figure out who conquers whom, and let them conquer
+        * Randomly increment inherent fitnesses
+        """
         # make fitness array
         arr = self.make_fitness_array()
 
@@ -229,8 +229,8 @@ class BasicWorld:
 
     def draw(self, interval=None, step=None):
         """
-		Gets the current np array state then draws the array
-		"""
+        Gets the current np array state then draws the array
+        """
 
         def agent_to_color(agent):
             if agent.strategy == Strategy.s:
@@ -247,10 +247,10 @@ class BasicWorld:
     def animate(self, frames, interval=None, skip=0, step=None):
         """Animate the automaton.
 
-		frames: number of frames to draw
-		interval: time between frames in seconds
-		iters: number of steps between frames
-		"""
+        frames: number of frames to draw
+        interval: time between frames in seconds
+        iters: number of steps between frames
+        """
         if step is None:
             step = self.step
 
@@ -274,13 +274,13 @@ class BasicWorld:
 
     def get_stats(self):
         """
-		Get some summary statistics that might be useful for graphing.  Stats
-		are returned as a dict.
-		Stats are:
-		* "time" : current timestep
-		* "num_c", "num_d", "num_s": Number of agents in each state
-		TODO: Should we refactor this so it returns lists or something?
-		"""
+        Get some summary statistics that might be useful for graphing.  Stats
+        are returned as a dict.
+        Stats are:
+        * "time" : current timestep
+        * "num_c", "num_d", "num_s": Number of agents in each state
+        TODO: Should we refactor this so it returns lists or something?
+        """
 
         stats = {"time": self.curr_step}
 
@@ -338,9 +338,9 @@ class Agent:
 
     def mutate(self, mutate_rate, curr_step):
         """
-		Placeholder function; fort the first type of world we do not have a mutate function,
-		so we will come back to implmenet later
-		"""
+        Placeholder function; for the first type of world we do not have a mutate function,
+        so we will come back to implmenet later
+        """
         num = np.random.rand()
         if num < mutate_rate:
             if self.coop_valid:
@@ -357,31 +357,30 @@ class Agent:
 
 if __name__ == "__main__":
     mutate_rate = 1e-4
-	num = 1
-	# Experiment 1:
-	# mutate_rate = 0
-	# num = 10000
-	# world = BasicWorld(n=50, bounds=[17,17,22,22], mutate_rate=mutate_rate, silent_coop=False)
+    num = 1
+    # Experiment 1:
+    # mutate_rate = 0
+    # num = 10000
+    # world = BasicWorld(n=50, bounds=[17,17,22,22], mutate_rate=mutate_rate, silent_coop=False)
 
-	# Experiment 2:
-	# mutate_rate = 1e-2
-	# num = 10000
-	# world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
+    # Experiment 2:
+    # mutate_rate = 1e-2
+    # num = 10000
+    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
 
-	# Experiment 3:
-	mutate_rate = 1e-2
-	num = 10000
-	world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+    # Experiment 3:
+    mutate_rate = 1e-2
+    num = 10000
+    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
-	# Experiment 4:
-	# mutate_rate = 1e-4
-	# num = 100000
+    # Experiment 4:
+    # mutate_rate = 1e-4
+    # num = 100000
 
-	# Experiment 5:
-	# mutate_rate = 1e-2
-	# num = 10000
-	#world = BasicWorld(n=50, do_mutation=False, bounds=(17, 17, 23, 23), silent_coop=False)
-
+    # Experiment 5:
+    # mutate_rate = 1e-2
+    # num = 10000
+    # world = BasicWorld(n=50, do_mutation=False, bounds=(17, 17, 23, 23), silent_coop=False)
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": [], "num_t": []}
     num = 10000
