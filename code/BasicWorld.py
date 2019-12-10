@@ -383,7 +383,6 @@ if __name__ == "__main__":
     # world = BasicWorld(n=50, do_mutation=False, bounds=(17, 17, 23, 23), silent_coop=False)
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": [], "num_t": []}
-    num = 10000
     for x in range(num):
         world.step()
         for key, value in world.get_stats().items():
