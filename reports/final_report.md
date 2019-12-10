@@ -104,10 +104,13 @@ Experiment 3 proves that cooperation can appear in a population of defectors if 
 Figure 14: The state of the world over time. Original "cooperators" do not exist.
 
 ### Experiment 4: Environment comparison to original paper
-For most of our experiments, we did not have the compute power to run a direct comparison to the original Hashem et al. paper. Therefore, we used Olin College's supercomputer (Deepmind) to run a full-scale experiment 3, using the original paper's 1e-4 mutation rate and 100,000 timesteps.
+For most of our experiments, we did not have the compute power to run a direct comparison to the original Hashem et al. paper. Therefore, we used Olin College's supercomputer (Deepmind) to run a full-scale Experiment 3, using the original paper's 1e-4 mutation rate and 100,000 timesteps.
 
 #### Results of Experiment 4
-We found that [something].
+We found that the results were consistent with HaShem et al, and also with our Experiment 3.
+
+![](images/exp4.png)
+Figure 9: The state of the world over time. The world is dominated by defectors until a group of silent cooperators emerge and take it over.
 
 ### Experiment 5: Simplified Tit for Tat Strategy
 The strategies that cells follow in previous experiments are relatively simple, either exclusively cooperating, defecting, or waiting until a certain time step to cooperate. Although computational limitations were still in place, an exploration of a more complex strategy was in order. One common strategy that is successful in Prisoner's Dilemma tournaments is the tit-for-tat strategy, which takes the same action that its opponent took in the last round. In this simulation, the PD is played against multiple opponents at the same time, so we used a weighted average of opponents' actions (weighted by the same grid used in the PD payouts; see Fig. 2).  If more than 40% of opponents defected, the cell would defect.  Otherwise, it could cooperate.
@@ -115,9 +118,7 @@ The strategies that cells follow in previous experiments are relatively simple, 
 As in Experiment 1, this experiment started with a 5x5 block of tit-for-tat players, with the rest of the grid full of defectors.
 
 #### Results of Experiment 5
-
 The tit-for-tat players did not survive or propagate.
-
 
 ![](images/exp5/t1.png)  
 Figure 15: The starting state of the world.
