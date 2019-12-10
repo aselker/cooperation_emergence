@@ -45,8 +45,8 @@ class Strategy(Enum):
 colors = {
     Strategy.c: [1.0, 0, 0],
     Strategy.d: [0, 0, 1.0],
-    (Strategy.s, 0): [0.9, 0, 0.1],
-    (Strategy.s, 1): [0.1, 0, 0.9],
+    (Strategy.s, 0): [0.1, 0, 0.9],
+    (Strategy.s, 1): [0.9, 0, 0.1],
     Strategy.t: [0, 1.0, 0],
 }
 
