@@ -103,28 +103,39 @@ Experiment 3 proves that cooperation can appear in a population of defectors if 
 ![](images/exp3_final_graph.png)  
 Figure 14: The state of the world over time. Original "cooperators" do not exist.
 
-### Experiment 4 (extension): Other Strategies
-The agents considered thus far only choose to cooperate or defect based on their own genome.  A broader array of strategies could be implemented, including:
-* Strategies which depend on other cells’ genomes
-* Strategies which depend on other cells’ past behavior
-* Strategies with random elements
-* Strategies which act differently based on cells’ relative positions
-
-As of now, we focused on documenting the other experiments and discussing our current results. The strategies we will be pursuing are strategies with more random elements
+### Experiment 4: Environment comparison to original paper
+For most of our experiments, we did not have the compute power to run a direct comparison to the original Hashem et al. paper. Therefore, wee utilized Olin College's supercomputer (Deepmind) to run a full-scale experiment 3, using the original paper's 1e-4 mutation rate and 100,000 timesteps.
 
 #### Results of Experiment 4
-Experiment 4’s results will vary heavily on the details of what we implement.  It seems likely that more “intelligent” strategies, such as tit-for-tat with noise and forgiveness, might dominate both defectors and cooperators due to their ability to cooperate with each other and defect against less-intelligent agents.  There may also be dynamic equilibria when strategies have multi-way rock-paper-scissors dominance over each other.
+We found that ________ (Adam)
+
+### Experiment 5: Simplified Tit for Tat Strategy
+The strategies that cells follow in previous experiments are relatively simple, either exclusively cooperating, defecting, or waiting until a certain time step to cooperate. Although compute limitations were still in-place, an exploration of a more complex strategy was in order. A simplified version of the "Tit for Tat" strategy, where a cell copies the strategy its neighbor used last time step, is an interesting exploration to see how a cell with a changing strategy survives. In order to simplify the strategy, we have an aggregate count: if at least 40% of a cell's neighbors cooperated last time step, then it will also cooperate. The results of the trial can be found below.
+
+#### Results of Experiment 5
+It was found that a simplified tit for tat strategy could not survive in the world we created due to an overwhelming majority of cells being defectors. Due to this, even if a central square of TFT cells exists at the start of an experiment, the outside cells will become defectors, causing the change to propagate inwardly until all TFT cells are defectors.
+
 
 ## Interpretation
-TODO: Add interpretation of Experiment 4.
-
 The goal of this experiment was to investigate how cooperation can emerge.  There are two core insights: first, that clusters of cooperators can survive and expand in an environment of defectors, but only if they are of a certain size; and second, that "silent cooperators" can form such clusters though genetic hitchhiking.  
 
 The first insight can be derived from Experiment 1.  When the starting cluster was 4x4 or smaller, it was always overrun.  When the cluster was 6x6, it always expanded and took over most of the grid.  Experiment 2 showed that even with some random noise, individual cooperators cannot survive for long.
 
 The second insight can be derived from Experiments 2 and 3.  Where randomly-mutated cooperators failed, silent cooperators sometimes succeeded, their behavior alleles hitchhiking on randomly-high fitness caused by another factor (the general-fitness gene).  The critical feature seems to be simultaneity, since that is the most important difference between silent cooperators and regular cooperators.
 
+The third insight can be derived from experiment 4. This [proves/disproves] the fact that our smaller experiments with mutation rates of 1e-2 and time steps of 10,000 were valid simplification of the original experiments.
+
+The final insights come from Experiment 5. In it, we determined that simplified strategies that look over the majority of neighbors  need to be seriously revised if used in this environment due to the overwhelming number of defectors that exist at the start of the simulation.
+
 ## Future Work
+The agents considered thus far have only relatively simple strategies.  A broader array of strategies could be implemented, including:
+* Strategies which depend on other cells’ genomes
+* Strategies which depend on other cells’ past behavior individually, not as a collective as we have implemented
+* Strategies with more random elements
+* Strategies which act differently based on cells’ relative positions
+* Strategies which include longer memory
+
+All work could also be tested more in-depth at the original 1e-4 learning rate and 100,000 time steps.
 
 ## Annotated bibliography
 
