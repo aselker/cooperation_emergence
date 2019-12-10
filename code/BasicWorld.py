@@ -13,12 +13,6 @@ import datetime
 import json
 import os
 
-
-"""
-TODO:
-0) re-edit paper including extension
-"""
-
 u = 0.09
 kernel = np.array(
     [
@@ -362,11 +356,32 @@ class Agent:
 
 
 if __name__ == "__main__":
-    mutate_rate = 1e-2
-    world = BasicWorld(
-        n=50, do_mutation=False, bounds=(17, 17, 23, 23), silent_coop=False
-    )
-    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
+    mutate_rate = 1e-4
+	num = 1
+	# Experiment 1:
+	# mutate_rate = 0
+	# num = 10000
+	# world = BasicWorld(n=50, bounds=[17,17,22,22], mutate_rate=mutate_rate, silent_coop=False)
+
+	# Experiment 2:
+	# mutate_rate = 1e-2
+	# num = 10000
+	# world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
+
+	# Experiment 3:
+	mutate_rate = 1e-2
+	num = 10000
+	world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+
+	# Experiment 4:
+	# mutate_rate = 1e-4
+	# num = 100000
+
+	# Experiment 5:
+	# mutate_rate = 1e-2
+	# num = 10000
+	#world = BasicWorld(n=50, do_mutation=False, bounds=(17, 17, 23, 23), silent_coop=False)
+
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": [], "num_t": []}
     num = 10000
