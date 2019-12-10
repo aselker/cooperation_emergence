@@ -19,7 +19,7 @@ The second factor is the Prisoner's Dilemma (PD) games which the cells play agai
 
 Figure 1: Prisoner's Dilemma payoff matrix for A
 
-The constant u is set to 0.09 in this simulation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in figure 2.
+The constant u is set to 0.09 in this simulation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in Fig. 2 and Fig. 3.
 
 ```
 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3
@@ -31,6 +31,9 @@ The constant u is set to 0.09 in this simulation.  The PD is played against ever
 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3
 ```
 Figure 2: Cells play the PD against every other cell within 3 spaces, with varying weights.
+
+![](images/kernel_heatmap.png)
+Figure 3: The PD weights, represented as a heatmap.
 
  Each cell cooperates or defects according to its genome.  There are three "behavior" alleles: Cooperate (C), which always cooperates; Defect (D), which always defects; and Silent (S), which defects for a time and then begins to cooperate.  The "timer" that controls the transition is initialized (exponentially distributed, with a mean of 200 steps) when a cell mutates into the S strategy, and is passed on if it replicates.
 
