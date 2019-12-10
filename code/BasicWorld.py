@@ -35,13 +35,15 @@ kernel = np.array(
         [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
     ]
 )
-kernel[2][2] = -u * np.sum(kernel)
+total_interactions = np.sum(kernel)
+kernel[2][2] = -u * total_interactions
 
 
 class Strategy(Enum):
     c = 0
     d = 1
     s = 2
+    t = 3
 
 
 def underride(d, **options):
@@ -114,10 +116,10 @@ class BasicWorld:
 
         pd_results = correlate2d(coop_array, kernel, mode="same", boundary="wrap")
 
-        coop_benefit = pd_results - (coop_array * kernel[2][2])
+        frac_coop = (pd_results - (coop_array * kernel[2][2])) / total_interactions
         for row in self.array:
             for agent in row:
-                agent.add_memory(coop_benefit)
+                agent.add_memory(frac_coop)
 
         return pd_results
 
@@ -283,6 +285,7 @@ class BasicWorld:
         stats["num_c"] = count_strat(Strategy.c)
         stats["num_d"] = count_strat(Strategy.d)
         stats["num_s"] = count_strat(Strategy.s)
+        stats["num_t"] = count_strat(Strategy.t)
 
         return stats
 
@@ -294,6 +297,7 @@ class Agent:
         self.inherent_fitness = 0
         self.strategy = strategy
         self.coop_valid = silent_coop
+        self.memory = 1
 
         if silent_coop:
             if np.random.random() < self.silent_coop_chance:
@@ -314,10 +318,12 @@ class Agent:
     def cooperate_p(self, t):
         if self.strategy == Strategy.c:
             return True
-        if self.strategy == Strategy.d:
+        elif self.strategy == Strategy.d:
             return False
-        if self.strategy == Strategy.s:
+        elif self.strategy == Strategy.s:
             return self.time_to_cooperate < t
+        elif self.strategy == Strategy.t:
+            return self.memory > 0.4
 
     def mutate(self, mutate_rate, curr_step):
         """
@@ -334,8 +340,8 @@ class Agent:
                 if self.strategy == Strategy.d:
                     self.strategy = Strategy.c
 
-    def add_memory(self, coop_benefit):
-        self.memory = coop_benefit
+    def add_memory(self, frac_coop):
+        self.memory = frac_coop
 
 
 if __name__ == "__main__":
@@ -343,7 +349,7 @@ if __name__ == "__main__":
     # world = BasicWorld(n=50, mutate_rate=mutate_rate, bounds=(17, 17, 22, 22), silent_coop=False)
     world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
-    stats = {"time": [], "num_c": [], "num_d": [], "num_s": []}
+    stats = {"time": [], "num_c": [], "num_d": [], "num_s": [], "num_t": []}
     num = 10000
     for x in range(num):
         world.step()
