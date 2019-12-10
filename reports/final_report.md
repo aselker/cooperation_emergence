@@ -173,4 +173,5 @@ I. Hashem, D. Telen, P. Nimmegeers, and J. Van Impe, “The Silent Cooperator: A
 
 ## Where's our work?
 
-Curious in checking out what we did? You can find our repository at https://github.com/aselker/cooperation_emergence/ or use our online notebook located at ___________.
+Curious in checking out what we did? You can find our repository at https://github.com/aselker/cooperation_emergence/ or use our online Binder notebook. 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aselker/cooperation_emergence/master?filepath=%2Fcode%2FJupyter%20Notebook.ipynb)
