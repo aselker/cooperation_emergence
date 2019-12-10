@@ -75,6 +75,7 @@ class BasicWorld:
         do_mutation=False,
         do_silent=False,
         bounds=None,
+        box_is_tft=False,
         mutate_rate=0,
         silent_coop=False,
     ):
@@ -88,8 +89,10 @@ class BasicWorld:
                 return Agent(silent_coop=silent_coop)
             else:
                 if (bounds[0] < x < bounds[2]) and (bounds[1] < y < bounds[3]):
-                    return Agent(strategy=Strategy.c, silent_coop=silent_coop)
-                    # return Agent(strategy=Strategy.t, silent_coop=silent_coop)
+                    if box_is_tft:
+                        return Agent(strategy=Strategy.t, silent_coop=silent_coop)
+                    else:
+                        return Agent(strategy=Strategy.c, silent_coop=silent_coop)
                 else:
                     return Agent(silent_coop=silent_coop)
 
@@ -366,20 +369,29 @@ class Agent:
 
 
 if __name__ == "__main__":
+    pics_dir = "pics"
+    if not os.path.isdir(pics_dir):
+        os.mkdir(pics_dir)
+
+    jsons_dir = "jsons"
+    if not os.path.isdir(jsons_dir):
+        os.mkdir(jsons_dir)
+
     # Experiment 1:
-    # mutate_rate = 0
-    # num = 100000
-    # world = BasicWorld(n=50, bounds=[17,17,22,22], mutate_rate=mutate_rate, silent_coop=False)
+    mutate_rate = 0
+    num = 10000
+    world = BasicWorld(
+        n=50,
+        bounds=[17, 17, 28, 28],
+        box_is_tft=False,
+        mutate_rate=mutate_rate,
+        silent_coop=False,
+    )
 
     # Experiment 2:
-    mutate_rate = 1e-4
-    num = 100000
-    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
-
-    # Experiment 3:
-    # mutate_rate = 4e-2
+    # mutate_rate = 1e-4
     # num = 100000
-    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
 
     # Experiment 4:
     # mutate_rate = 1e-4
@@ -389,7 +401,7 @@ if __name__ == "__main__":
     # Experiment 5:
     # mutate_rate = 0
     # num = 100000
-    # world = BasicWorld(n=50, do_mutation=False, bounds=(17, 17, 23, 23), silent_coop=False)
+    # world = BasicWorld(n=50, box_is_tft=True, do_mutation=False, bounds=(17, 17, 23, 23), silent_coop=False)
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": [], "num_t": []}
     for x in range(num):
@@ -403,12 +415,12 @@ if __name__ == "__main__":
         if x % 1000 == 0:
             # if False:
             world.draw()
-            plt.savefig(f"t{x}.png")
+            plt.savefig(os.path.join(pics_dir, f"t{x}.png"))
             plt.clf()
             print(x / num * 100)
 
     world.draw()
-    plt.savefig(f"t{x}.png")
+    plt.savefig(os.path.join(pics_dir, f"t{x}.png"))
     plt.clf()
 
     if max(stats["num_c"]) > 0:
@@ -423,7 +435,7 @@ if __name__ == "__main__":
     plt.xlabel("Time (steps)")
     plt.ylabel("Number of agents")
     plt.legend()
-    plt.savefig("agents_over_time.png")
+    plt.savefig(os.path.join(pics_dir, "agents_over_time.png"))
 
     jsons = "jsons/"
     file = f'{num}_timesteps_on_{datetime.datetime.now().strftime("%B %d %Y at %I:%M:%S%p")}.json'
