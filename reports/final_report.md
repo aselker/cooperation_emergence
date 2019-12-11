@@ -131,22 +131,22 @@ This experiment started with a 6x6 block of tit-for-tat players, with the rest o
 #### Results of Experiment 4
 The tit-for-tat players' growth was unlike anything we observed prior or that Hashem et al. observed. As seen in Figure 17, the number of Tit-for-Tat following cells mostly plateaus for around 3,000 timesteps, only gradually increasing. However, around step 3000, the population begins to grow more quickly.  After this point, the growth resembles that in Experiment 1.
 
-![](images/exp4/6x6/cells_over_time.png)  
+![](images/exp4/6x6/agents_over_time.png)  
 Figure 18: The state of the world over time.
 
-![](images/exp4/6x6/t1.png)  
+![](images/exp4/6x6/t0.png)  
 Figure 19: The starting state of the world.
 
-![](images/exp4/6x6/t1001.png)  
+![](images/exp4/6x6/t1000.png)  
 Figure 20: By 1000 steps, the tit-for-tat players are beginning to expand.
 
-![](images/exp4/6x6/t2501.png)  
+![](images/exp4/6x6/t2500.png)  
 Figure 21: At 2500 steps, the tit-for-tat players are still growing slowly.
 
-![](images/exp4/6x6/t3001.png)  
+![](images/exp4/6x6/t3000.png)  
 Figure 22: At 3000 steps, the group suddenly begins to grow quickly.
 
-![](images/exp4/6x6/t4501.png)  
+![](images/exp4/6x6/t4500.png)  
 Figure 23: By 4500 steps, the grid is mostly tit-for-tat players.
 
 The slow growth near the beginning is probably because of how the tit-for-tat players choose their actions.  At the beginning, they all defect.  The cells on the corners of the block are exposed to more defectors than fellow tit-for-tat players; regardless of the other tit-for-tat cells' actions, those cells will feel more defection than cooperation, and will therefore begin to defect.  This will "spread" inward until all of the cells are defecting, leaving the tit-for-tat players as nothing but ordinary defectors.
