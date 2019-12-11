@@ -86,7 +86,7 @@ class BasicWorld:
             if bounds is None:
                 return Agent(silent_coop=silent_coop)
             else:
-                if (bounds[0] < x < bounds[2]) and (bounds[1] < y < bounds[3]):
+                if (bounds[0] < x <= bounds[2]) and (bounds[1] < y <= bounds[3]):
                     if box_is_tft:
                         return Agent(strategy=Strategy.t, silent_coop=silent_coop)
                     else:
