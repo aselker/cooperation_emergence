@@ -34,7 +34,7 @@ C/D: -u
 C/C: 1-u
 """
 
-u = 0.09
+u = 0.07
 total_interactions = np.sum(kernel)
 kernel[3][3] = -u * total_interactions
 
@@ -86,7 +86,7 @@ class BasicWorld:
             if bounds is None:
                 return Agent(silent_coop=silent_coop)
             else:
-                if (bounds[0] < x < bounds[2]) and (bounds[1] < y < bounds[3]):
+                if (bounds[0] < x <= bounds[2]) and (bounds[1] < y <= bounds[3]):
                     if box_is_tft:
                         return Agent(strategy=Strategy.t, silent_coop=silent_coop)
                     else:
@@ -387,6 +387,16 @@ if __name__ == "__main__":
     # mutate_rate = 0
     # num = 5000
     # world = BasicWorld(n=50, bounds=[17,17,25,25], mutate_rate=mutate_rate, silent_coop=False)
+	
+    # mutate_rate = 0
+    # num = 10000
+    # world = BasicWorld(
+    #     n=50,
+    #     bounds=[17, 17, 22, 22],
+    #     box_is_tft=False,
+    #     mutate_rate=mutate_rate,
+    #     silent_coop=False,
+    # )
 
     # Experiment 2:
     # mutate_rate = 1e-4
@@ -394,14 +404,18 @@ if __name__ == "__main__":
     # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
 
     # Experiment 4:
-    mutate_rate = 5e-3
-    num = 10000
-    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+    # mutate_rate = 1e-3
+    # num = 10000
+    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
     # Experiment 5:
-    # mutate_rate = 0
-    # num = 100000
-    # world = BasicWorld(n=50, box_is_tft=True, bounds=(17, 17, 23, 23), silent_coop=False)
+    """
+    mutate_rate = 0
+    num = 10000
+    world = BasicWorld(
+        n=50, box_is_tft=True, bounds=(17, 17, 23, 23), silent_coop=False
+    )
+    """
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": [], "num_t": []}
     for x in range(num):
