@@ -92,19 +92,19 @@ Once we have established that a sufficiently-sized cluster of cooperators will s
 #### Results of Experiment 2
 We expected the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading, and this is what we observe.  It is consistent with Hashem et al.'s findings. We also confirmed these results for mutation rates of 1e-2 and 1e-3. Below is a few snapshots of the world during its development.
 
-![](images/exp2/t0.png)  
+![](images/exp2/run_2/t0.png)  
 
 Figure 12: The starting state of the world in experiment 2 (only defectors).
 
-![](images/exp2/t50000.png)  
+![](images/exp2/run_2/t50000.png)  
 
 Figure 13: The starting state of the world on step 50001.
 
-![](images/exp2/t100000.png)  
+![](images/exp2/run_2/t99999.png)  
 
 Figure 14: The ending state of the world on step 100000.
 
-![](images/exp2/agents_over_time.png)  
+![](images/exp2/run_2/agents_over_time.png)  
 
 Figure 15: The number of cooperator and defector cells over time.
 
@@ -116,7 +116,7 @@ The third experiment involves adding a silent-cooperator allele that means that 
 #### Results of Experiment 3
 Experiment 3 found a few interesting results. To begin with, although our experiment had the same setup of Hashem et al., we were unable to replicate their success of having silent cooperators successfully dominate the biofilm. The number of each type of agent over time can be seen in Figure 16, which shows how although cooperators occasionally dominated for short time periods, they were unable to maintain that dominance. We are uncertain about where this difference derives from.
 
-![](images/exp3/agents_over_time.png)  
+![](images/exp3/run_2/agents_over_time.png)  
 
 Figure 16: The number of each kind of agent over time for experiment 3.
 
@@ -162,7 +162,7 @@ The first experiment provided the insight that once exceeding a critical mass, c
 The second insight can be derived from Experiments 2 and 3. Where randomly-mutated cooperators failed, silent cooperators sometimes succeeded, their behavior alleles hitchhiking on randomly-high fitness caused by another factor (the general-fitness gene).  The critical feature seems to be simultaneity, since that is the most important difference between silent cooperators and regular cooperators. Although the silent cooperators were unable to maintain sustained control of the biofilm, the experiment suggests that under different circumstances they could, which Hashem et al. support.
 
 
-INSIGHTS FROM EXPERIMENT 4
+Finally, from Experiment 4 we learned that more complex strategies can work in the biofilm as we designed it. We did make significant compromises in complexity in order to save on computation time, which means in the future more complex strategies can be analyzed to see if they dominate more completely.
 
 ## Future Work
 The agents considered thus far have only relatively simple strategies.  A broader array of strategies could be implemented, including:
