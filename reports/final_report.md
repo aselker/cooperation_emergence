@@ -45,28 +45,29 @@ Replication is controlled by fitness.  During each timestep, each cell plays the
 ### Experiment 1: Basic System replication
 The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors.
 
-We ran these simulations for only 10,000 steps each, rather than the 100,000 steps used by Hashem and in our other experiments, because they all reach equilibria within that time.
+We ran these simulations for only 20,000 steps each, rather than the 100,000 steps used by Hashem and in our other experiments, because they all reach equilibria within that time.
 
 #### Results of Experiment 1
-Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand.  We found that in our model, with u=0.09 as in Hashem et al., almost any size of group eventually collapsed.  After reducing u to 0.07, we replicated their findings that 6x6 groups tend to expand but 5x5 groups tend to collapse.
+Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand.  We found that in our model, with u=0.09 as in Hashem et al., almost any size of group eventually collapsed.  After reducing u to 0.07, we replicated their finding that 6x6 groups tend to expand.  In our model, this extends down to 4x4 groups.  3x3 groups reliably collapse.
 
-![](images/exp1/6x6_t0.png)
-Figure 3: Starting state of the world with a 6x6 block of cooperators.
 
-![](images/exp1/6x6_t1000.png)
+![](images/exp1/5x5/t0.png)
+Figure 3: Starting state of the world with a 5x5 block of cooperators.
+
+![](images/exp1/5x5/t1000.png)
 Figure 4: At 1000 time steps, the group is beginning to expand.
 
-![](images/exp1/6x6_t99999.png)
+![](images/exp1/5x5/t9999.png)
 Figure 5: At the end of the simulation, most of the territory is full of cooperators, with a narrow bands of defectors.
 
-![](images/exp1/6x6_cells_over_time.png)
+![](images/exp1/5x5/cells_over_time.png)
 Figure 6: The state of the world over time. The cooperators eventually achieve steady dominance.
 
-![](images/exp1/5x5_t0.png)
-Figure 7: Starting state of the world with a 5x5 block of cooperators.
+![](images/exp1/3x3/t0.png)
+Figure 7: Starting state of the world with a 3x3 block of cooperators.
 
-![](images/exp1/5x5_cells_over_time.png)
-Figure 8: A 5x5 block of cooperators does not succeed.
+![](images/exp1/3x3/cells_over_time.png)
+Figure 8: A 3x3 block of cooperators does not succeed.
 
 ### Experiment 2: Mutation
 Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; all cells become regular cooperators when mutating. We use a mutation rate of 1e-4 as in the original paper for results published, but also ran tests at 1e-2 and 1e-3.  Because of limited computational resources, we only ran the simulations for 10,000 steps, rather than the 100,000 steps used in the original paper.
@@ -128,24 +129,32 @@ Figure 9: The state of the world over time. The world is dominated by defectors 
 ### Experiment 5: Simplified Tit for Tat Strategy
 The strategies that cells follow in previous experiments are relatively simple, either exclusively cooperating, defecting, or waiting until a certain time step to cooperate. Although computational limitations were still in place, an exploration of a more complex strategy was in order. One common strategy that is successful in Prisoner's Dilemma tournaments is the tit-for-tat strategy, which takes the same action that its opponent took in the last round. In this simulation, the PD is played against multiple opponents at the same time, so we used a weighted average of opponents' actions (weighted by the same grid used in the PD payouts; see Fig. 2).  If more than 40% of opponents defected, the cell would defect.  Otherwise, it could cooperate.
 
-As in Experiment 1, this experiment started with a 5x5 block of tit-for-tat players, with the rest of the grid full of defectors.
+As in Experiment 1, this experiment started with a 6x6 block of tit-for-tat players, with the rest of the grid full of defectors.  We ran this simulation for 20,000 steps.
 
 #### Results of Experiment 5
-The tit-for-tat players did not survive or propagate.
+The group of tit-for-tat players grows slowly at first, and then very quickly.  This is unstable; in some simulation runs, the group never grows quickly, remaining at a zero or slow growth rate for as long as we simulate.
 
 ![](images/exp5/t1.png)  
 Figure 15: The starting state of the world.
 
 ![](images/exp5/t1001.png)  
-Figure 16: By 1000 steps, the tit-for-tat players are beginning to die out.
+Figure 16: By 1000 steps, the tit-for-tat players are beginning to expand.
 
-![](images/exp5/t3001.png)  
-Figure 17: By 3000 steps, the tit-for-tat players are extinct.
+![](images/exp5/t4001.png)  
+Figure 17: At 4000 steps, the tit-for-tat players are still growing slowly.
+
+![](images/exp5/t5001.png)  
+Figure 17: At 5000 steps, the group suddenly begins to grow quickly.
+
+![](images/exp5/t6001.png)  
+Figure 17: By 6000 steps, the grid is mostly tit-for-tat players.
 
 ![](images/exp5/cells_over_time.png)  
-Figure 18: The state of the world over time.  Defectors dominate.
+Figure 18: The state of the world over time.  Note the sharp jump around 5000 steps.
 
-This is probably because of how the tit-for-tat players choose their actions.  The cells on the corners of the block are exposed to more defectors than fellow tit-for-tat players; regardless of the other tit-for-tat cells' actions, those cells will feel more defection than cooperation, and will therefore begin to defect.  This will "spread" inward until all of the cells are defecting, leaving the tit-for-tat players as nothing but ordinary defectors.
+This is probably because of how the tit-for-tat players choose their actions.  At the beginning, they all defect.  The cells on the corners of the block are exposed to more defectors than fellow tit-for-tat players; regardless of the other tit-for-tat cells' actions, those cells will feel more defection than cooperation, and will therefore begin to defect.  This will "spread" inward until all of the cells are defecting, leaving the tit-for-tat players as nothing but ordinary defectors.
+
+Eventually, they begin to cooperate.  We are unsure of the trigger for this; regardless, around turn 
 
 
 ## Interpretation
