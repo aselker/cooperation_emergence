@@ -68,7 +68,7 @@ Figure 7: The state of a 5x5 block of cooperators after 10001 timesteps.
 
 ![](images/exp1/5x5/t19999.png)
 
-Figure 8: The state of a 5x5 block of cooperators after 20000 timesteps, at the end of the experiment.
+Figure 8: The state of a 5x5 block of cooperators after 20,000 timesteps, at the end of the experiment.
 
 ![](images/exp1/5x5/agents_over_time.png)
 
@@ -79,18 +79,18 @@ We also tested a 3x3 starting group of cooperating cells, and saw that within 50
 
 ![](images/exp1/3x3/t0.png)
 
-Figure 10: An image of the starting state of a 3x3 block of cooperators in experiment 1.
+Figure 10: This simulation begins with a 3x3 block of cooperators.
 
 ![](images/exp1/3x3/t500.png)
 
-Figure 11: An image of the starting state of a 3x3 block of cooperators after 500 timesteps.
+Figure 11: After 500 timesteps, all of the cooperators are gone.
 
 
 ### Experiment 2: Mutation
 Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; all cells become regular cooperators when mutating. We use a mutation rate of 1e-4 as in the original paper for results published. We also ran the test for 100,000 time steps, as in the original paper.
 
 #### Results of Experiment 2
-We expected the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading, and this is what we observe.  It is consistent with Hashem et al.'s findings. We also confirmed these results for mutation rates of 1e-2 and 1e-3. Below is a few snapshots of the world during its development.
+We expected the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading, and this is what we observe.  It is consistent with Hashem et al.'s findings. We also confirmed these results for mutation rates of 1e-2 and 1e-3.  Cooperators often appear, but they disappear just as quickly.
 
 ![](images/exp2/run_2/t0.png)  
 
@@ -98,15 +98,15 @@ Figure 12: The starting state of the world in experiment 2 (only defectors).
 
 ![](images/exp2/run_2/t50000.png)  
 
-Figure 13: The starting state of the world on step 50001.
+Figure 13: The state of the world on step 50,000.  There are a few cooperators, but the world is still dominated by defectors.
 
 ![](images/exp2/run_2/t99999.png)  
 
-Figure 14: The ending state of the world on step 100000.
+Figure 14: The ending state of the world on step 100,000.  Nothing significant has changed since step 50,000.
 
 ![](images/exp2/run_2/agents_over_time.png)  
 
-Figure 15: The number of cooperator and defector cells over time.
+Figure 15: The number of cooperator and defector cells over time.  
 
 ### Experiment 3: Add silent-cooperator state
 The third experiment involves adding a silent-cooperator allele that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become "activate," resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, with the hypothesized result of clusters of cooperators suddenly appearing later on that are above the critical threshold for cooperator success. Within the experiment, the amount of time before activation was exponentially distributed with a mean of 200 time steps. We still ran with a u of 0.07, unlike Hashem et al.'s value of 0.09.
