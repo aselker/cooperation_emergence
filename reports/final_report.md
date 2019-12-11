@@ -126,36 +126,32 @@ Figure 16: The number of each kind of agent over time for experiment 3.
 ### Experiment 4: Simplified Tit for Tat Strategy
 The strategies that cells follow in previous experiments are relatively simple, either exclusively cooperating, defecting, or waiting until a certain time step to cooperate. One common strategy that is successful in Prisoner's Dilemma tournaments is the tit-for-tat strategy, which takes the same action that its opponent took in the last round. In this simulation, the PD is played against multiple opponents at the same time, so we used a weighted average of opponents' actions (weighted by the same grid used in the PD payouts; see Fig. 2).  If more than 40% of opponents cooperated, the cell would cooperate.  Otherwise, it would defect.
 
-This experiment started with a 6x6 block of tit-for-tat players, with the rest of the grid full of defectors.  We ran this simulation for 12,000, reduced from prior experiments' 100k steps due to a larger computation requirement.
+This experiment started with a 6x6 block of tit-for-tat players, with the rest of the grid full of defectors.  We ran this simulation for 10,000, reduced from prior experiments' 100,000 steps due to a larger computation requirement.
 
 #### Results of Experiment 4
-The tit-for-tat players' growth was unlike anything we observed prior or that Hashem et al. observed. As seen in Figure 17, the number of Tit-for-Tat following cells mostly plateaus for around 8,000 timesteps, only gradually increasing. However, around step 8500 a sudden explosion of growth in the population is observed.
+The tit-for-tat players' growth was unlike anything we observed prior or that Hashem et al. observed. As seen in Figure 17, the number of Tit-for-Tat following cells mostly plateaus for around 3,000 timesteps, only gradually increasing. However, around step 3000, the population begins to grow more quickly.  After this point, the growth resembles that in Experiment 1.
 
-![](images/exp5/5x5/agents_over_time.png)
+![](images/exp4/6x6/cells_over_time.png)  
+Figure 18: The state of the world over time.
 
-Figure 18: The state of the world over the course of the experiment.
+![](images/exp4/6x6/t1.png)  
+Figure 19: The starting state of the world.
 
-In order to discover the root of this, it is possible to look at the state of the biofilm at different timesteps. At time 0 (Figure 19), the biofilm looks as is expected, and it slowly expands until time step 8000 (Figure 20). Starting sometime between time step 8000 and 8500, the tit-for-tat cells are able to start expanding more rapidly, quickly growing in the next thousand steps (Figures 21 and 22). After 12,000 steps, the simulation is in a similar situation as Experiment 1, suggesting a similar stead-state is being reached (Figure 23).
+![](images/exp4/6x6/t1001.png)  
+Figure 20: By 1000 steps, the tit-for-tat players are beginning to expand.
 
-![](images/exp5/5x5/t0.png)
+![](images/exp4/6x6/t2501.png)  
+Figure 21: At 2500 steps, the tit-for-tat players are still growing slowly.
 
-Figure 19: The state of the world at the start of experiment 4.
+![](images/exp4/6x6/t3001.png)  
+Figure 22: At 3000 steps, the group suddenly begins to grow quickly.
 
-![](images/exp5/5x5/t8000.png)
+![](images/exp4/6x6/t4501.png)  
+Figure 23: By 4500 steps, the grid is mostly tit-for-tat players.
 
-Figure 20: The state of the world at step 8001.
+The slow growth near the beginning is probably because of how the tit-for-tat players choose their actions.  At the beginning, they all defect.  The cells on the corners of the block are exposed to more defectors than fellow tit-for-tat players; regardless of the other tit-for-tat cells' actions, those cells will feel more defection than cooperation, and will therefore begin to defect.  This will "spread" inward until all of the cells are defecting, leaving the tit-for-tat players as nothing but ordinary defectors.
 
-![](images/exp5/5x5/t8500.png)
-
-Figure 21: The state of the world at step 8501.
-
-![](images/exp5/5x5/t9000.png)
-
-Figure 22: The state of the world at step 9001.
-
-![](images/exp5/5x5/t11999.png)
-
-Figure 23: The state of the world at step 12000.
+Eventually, they begin to cooperate.  We are unsure of the trigger for this; regardless, at some point (around turn 3000 in this run), some small group begins to cooperate, and the rest quickly follow.  At this point, each tit-for-tat player has enough cooperative neighbors to cooperate reliably, and they spread quickly.
 
 
 ## Interpretation
