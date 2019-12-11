@@ -376,7 +376,7 @@ if __name__ == "__main__":
     num = 10000
     world = BasicWorld(
         n=50,
-        bounds=[17, 17, 23, 23],
+        bounds=[17, 17, 22, 22],
         box_is_tft=False,
         mutate_rate=mutate_rate,
         silent_coop=False,
@@ -393,9 +393,13 @@ if __name__ == "__main__":
     # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
     # Experiment 5:
-    # mutate_rate = 0
-    # num = 100000
-    # world = BasicWorld(n=50, box_is_tft=True, bounds=(17, 17, 23, 23), silent_coop=False)
+    """
+    mutate_rate = 0
+    num = 10000
+    world = BasicWorld(
+        n=50, box_is_tft=True, bounds=(17, 17, 23, 23), silent_coop=False
+    )
+    """
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": [], "num_t": []}
     for x in range(num):
