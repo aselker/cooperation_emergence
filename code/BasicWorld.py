@@ -372,6 +372,7 @@ if __name__ == "__main__":
         os.mkdir(jsons_dir)
 
     # Experiment 1:
+    """
     mutate_rate = 0
     num = 20000
     world = BasicWorld(
@@ -381,41 +382,28 @@ if __name__ == "__main__":
         mutate_rate=mutate_rate,
         silent_coop=False,
     )
-    # mutate_rate = 1e-4
-    # num = 1
-    # Experiment 1:
-    # mutate_rate = 0
-    # num = 5000
-    # world = BasicWorld(n=50, bounds=[17,17,25,25], mutate_rate=mutate_rate, silent_coop=False)
-
-    # mutate_rate = 0
-    # num = 10000
-    # world = BasicWorld(
-    #     n=50,
-    #     bounds=[17, 17, 22, 22],
-    #     box_is_tft=False,
-    #     mutate_rate=mutate_rate,
-    #     silent_coop=False,
-    # )
+    """
 
     # Experiment 2:
-    # mutate_rate = 1e-4
-    # num = 100000
-    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
+    """
+    mutate_rate = 1e-4
+    num = 100000
+    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
+    """
 
     # Experiment 4:
-    # mutate_rate = 1e-3
-    # num = 10000
-    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+    """
+    mutate_rate = 1e-3
+    num = 10000
+    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+    """
 
     # Experiment 5:
-    """
     mutate_rate = 0
-    num = 12000
+    num = 10000
     world = BasicWorld(
         n=50, box_is_tft=True, bounds=(17, 17, 23, 23), silent_coop=False
     )
-    """
 
     plt.figure(figsize=(12, 8))
 
