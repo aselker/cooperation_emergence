@@ -72,7 +72,6 @@ class BasicWorld:
         self,
         n=50,
         m=None,
-        do_mutation=False,
         bounds=None,
         box_is_tft=False,
         mutate_rate=0,
@@ -193,13 +192,13 @@ class BasicWorld:
             self.array[conquered_loc[0]][conquered_loc[1]] = copy.deepcopy(
                 self.array[conqueror_loc[0]][conqueror_loc[1]]
             )
-            self.array[conquered_loc[0]][conquered_loc[1]].mutate(
-                mutate_rate=self.mutate_rate, curr_step=self.curr_step
-            )
 
-        if self.silent_coop:
-            # Increment random inherent_fitness vars
+        if self.mutate_rate:
             for agent in [agent for row in self.array for agent in row]:
+                # Mutate strategies
+                agent.mutate(mutate_rate=self.mutate_rate, curr_step=self.curr_step)
+
+                # Increment random inherent_fitness vars
                 if np.random.random() < self.inherent_fitness_increment_prob:
                     agent.inherent_fitness += self.inherent_fitness_increment_amt
 
@@ -355,7 +354,6 @@ class Agent:
             if self.coop_valid:
                 self.strategy = Strategy.s
                 self.time_to_cooperate = int(np.random.exponential(200)) + curr_step
-                # print("that worked?!", self.time_to_cooperate)
             else:
                 if self.strategy == Strategy.d:
                     self.strategy = Strategy.c
@@ -374,15 +372,15 @@ if __name__ == "__main__":
         os.mkdir(jsons_dir)
 
     # Experiment 1:
-    mutate_rate = 0
-    num = 10000
-    world = BasicWorld(
-        n=50,
-        bounds=[17, 17, 28, 28],
-        box_is_tft=False,
-        mutate_rate=mutate_rate,
-        silent_coop=False,
-    )
+    # mutate_rate = 0
+    # num = 10000
+    # world = BasicWorld(
+    # n=50,
+    # bounds=[17, 17, 28, 28],
+    # box_is_tft=False,
+    # mutate_rate=mutate_rate,
+    # silent_coop=False,
+    # )
 
     # Experiment 2:
     # mutate_rate = 1e-4
@@ -390,14 +388,14 @@ if __name__ == "__main__":
     # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
 
     # Experiment 4:
-    # mutate_rate = 1e-4
-    # num = 100000
-    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+    mutate_rate = 5e-3
+    num = 10000
+    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
     # Experiment 5:
     # mutate_rate = 0
     # num = 100000
-    # world = BasicWorld(n=50, box_is_tft=True, do_mutation=False, bounds=(17, 17, 23, 23), silent_coop=False)
+    # world = BasicWorld(n=50, box_is_tft=True, bounds=(17, 17, 23, 23), silent_coop=False)
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": [], "num_t": []}
     for x in range(num):
