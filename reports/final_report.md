@@ -114,11 +114,23 @@ The third experiment involves adding a silent-cooperator allele that means that 
 
 
 #### Results of Experiment 3
-Experiment 3 found a few interesting results. To begin with, although our experiment had the same setup of Hashem et al., we were unable to replicate their success of having silent cooperators successfully dominate the biofilm. The number of each type of agent over time can be seen in Figure 16, which shows how although cooperators occasionally dominated for short time periods, they were unable to maintain that dominance. We are uncertain about where this difference derives from.
+Experiment 3 found a few interesting results. To begin with, although our experiment had the same setup of Hashem et al., we were unable to replicate their success of having silent cooperators successfully dominate the biofilm. The number of each type of agent over time can be seen in Figure 16, which shows how although cooperators occasionally dominated for short time periods, they were unable to maintain that dominance. We are uncertain about where this difference derives from. The change over time can be observed in Figures 17-19, where the spike around timestep 40,000 begins expanding around timestep 34000 and drops down again around step 46000.
 
 ![](images/exp3/run_2/agents_over_time.png)  
 
 Figure 16: The number of each kind of agent over time for experiment 3.
+
+![](images/exp3/run_2/t34000.png)  
+
+Figure 17: The state of the game on step 34001.
+
+![](images/exp3/run_2/t40000.png)  
+
+Figure 18: The state of the game on step 40001.
+
+![](images/exp3/run_2/t46000.png)  
+
+Figure 19: The state of the game on step 46001.
 
 
 ### Experiment 4: Simplified Tit for Tat Strategy
@@ -130,22 +142,22 @@ This experiment started with a 6x6 block of tit-for-tat players, with the rest o
 The tit-for-tat players' growth was unlike anything we observed prior or that Hashem et al. observed. As seen in Figure 22, the number of Tit-for-Tat following cells mostly plateaus for around 3,000 timesteps, only gradually increasing. However, around step 3000, the population begins to grow more quickly.  After this point, the growth resembles that in Experiment 1.
 
 ![](images/exp4/6x6/t0.png)  
-Figure 17: The starting state of the world.
+Figure 20: The starting state of the world.
 
 ![](images/exp4/6x6/t1000.png)  
-Figure 18: By 1000 steps, the tit-for-tat players are beginning to expand.
+Figure 21: By 1000 steps, the tit-for-tat players are beginning to expand.
 
 ![](images/exp4/6x6/t2500.png)  
-Figure 19: At 2500 steps, the tit-for-tat players are still growing slowly.
+Figure 22: At 2500 steps, the tit-for-tat players are still growing slowly.
 
 ![](images/exp4/6x6/t3000.png)  
-Figure 20: At 3000 steps, the group suddenly begins to grow quickly.
+Figure 23: At 3000 steps, the group suddenly begins to grow quickly.
 
 ![](images/exp4/6x6/t4500.png)  
-Figure 21: By 4500 steps, the grid is mostly tit-for-tat players.
+Figure 24: By 4500 steps, the grid is mostly tit-for-tat players.
 
 ![](images/exp4/6x6/agents_over_time.png)  
-Figure 22: The state of the world over time.
+Figure 25: The state of the world over time.
 
 
 The slow growth near the beginning is probably because of how the tit-for-tat players choose their actions.  At the beginning, they all defect.  The cells on the corners of the block are exposed to more defectors than fellow tit-for-tat players; regardless of the other tit-for-tat cells' actions, those cells will feel more defection than cooperation, and will therefore begin to defect.  This will "spread" inward until all of the cells are defecting, leaving the tit-for-tat players as nothing but ordinary defectors.
