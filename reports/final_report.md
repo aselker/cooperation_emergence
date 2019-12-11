@@ -19,7 +19,7 @@ The second factor is the Prisoner's Dilemma (PD) games which the cells play agai
 
 Figure 1: Prisoner's Dilemma payoff matrix for A
 
-The constant u is set to 0.09 in this simulation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in Fig. 2 and Fig. 3.
+The constant u was set to 0.09 in Hashem et al.'s model.  However, we found that with a value this high, cooperators never formed lasting groups.  After moving its value down to 0.07, we replicated much of their behavior.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in Fig. 2 and Fig. 3.
 
 ```
 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3
@@ -45,18 +45,28 @@ Replication is controlled by fitness.  During each timestep, each cell plays the
 ### Experiment 1: Basic System replication
 The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors.
 
-![A 5x5 run of experiment 1 that survives](images/exp1_5x5_success.png)
-
-Figure 3: An example of experiment 1 where a 5x5 block of cooperators survives and dominates the system.
-
-![A 5x5 run of experiment 1 that dies](images/exp1_5x5_failure.png)
-
-Figure 4: An example of experiment 1 where a 5x5 block of cooperators dies off.
+We ran these simulations for only 10,000 steps each, rather than the 100,000 steps used by Hashem and in our other experiments, because they all reach equilibria within that time.
 
 #### Results of Experiment 1
-Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand.  In order to test our model's similarity, we test multiple times at a 5x5 grid, and find that the cooperators might survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks reliably die out, and 6x6 cooperator blocks reliably survive.
+Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand.  We found that in our model, with u=0.09 as in Hashem et al., almost any size of group eventually collapsed.  After reducing u to 0.07, we replicated their findings that 6x6 groups tend to expand but 5x5 groups tend to collapse.
 
-The results of our first experiment show that, while the system is not totally deterministic, groups of cooperators do seem to expand if they reach a critical size of around 5x5.  In contrast to Hashem et al., 5x5 clusters seem unstable; the other results are consistent with their findings.
+![](images/exp1/6x6_t0.png)
+Figure 3: Starting state of the world with a 6x6 block of cooperators.
+
+![](images/exp1/6x6_t1000.png)
+Figure 4: At 1000 time steps, the group is beginning to expand.
+
+![](images/exp1/6x6_t99999.png)
+Figure 5: At the end of the simulation, most of the territory is full of cooperators, with a narrow bands of defectors.
+
+![](images/exp1/6x6_cells_over_time.png)
+Figure 6: The state of the world over time. The cooperators eventually achieve steady dominance.
+
+![](images/exp1/5x5_t0.png)
+Figure 7: Starting state of the world with a 5x5 block of cooperators.
+
+![](images/exp1/5x5_cells_over_time.png)
+Figure 8: A 5x5 block of cooperators does not succeed.
 
 ### Experiment 2: Mutation
 Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; all cells become regular cooperators when mutating. We use a mutation rate of 1e-4 as in the original paper for results published, but also ran tests at 1e-2 and 1e-3.  Because of limited computational resources, we only ran the simulations for 10,000 steps, rather than the 100,000 steps used in the original paper.
