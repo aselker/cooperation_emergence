@@ -19,7 +19,7 @@ The second factor is the Prisoner's Dilemma (PD) games which the cells play agai
 
 Figure 1: Prisoner's Dilemma payoff matrix for A
 
-The constant u is set to 0.09 in this simulation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in Fig. 2 and Fig. 3.
+The constant u was set to 0.09 in the original work of Hashem etal., but was tested with multiple different values during our experimentation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in Fig. 2 and Fig. 3.
 
 ```
 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3
@@ -35,23 +35,22 @@ Figure 2: Cells play the PD against every other cell within 3 spaces, with varyi
 ![](images/kernel_heatmap.png)
 Figure 3: The PD weights, represented as a heatmap.
 
- Each cell cooperates or defects according to its genome.  There are three "behavior" alleles: Cooperate (C), which always cooperates; Defect (D), which always defects; and Silent (S), which defects for a time and then begins to cooperate.  The "timer" that controls the transition is initialized (exponentially distributed, with a mean of 200 steps) when a cell mutates into the S strategy, and is passed on if it replicates.
-
+Each cell cooperates or defects according to its genome.  There are three "behavior" alleles: Cooperate (C), which always cooperates; Defect (D), which always defects; and Silent (S), which defects for a time and then begins to cooperate.  The "timer" that controls the transition is initialized (exponentially distributed, with a mean of 200 steps) when a cell mutates into the S strategy, and is passed on if it replicates.
 
 Replication is controlled by fitness.  During each timestep, each cell plays the PD against its neighbors, and the results are summed.  The cell's general fitness factor is added, to produce the cell's fitness.  Then, the cell is compared to a random one of its neighbors.  If the neighbor's fitness is higher, the neighbor might invade, with a probability (F_2 - F_1)/k, where F_2 is the invading cell's fitness, F_1 is the invaded cell's fitness, and k is a constant equal to 24 + 24u.
 
 
 ## Experiments
 ### Experiment 1: Basic System replication
-The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors.
+The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors. Our experiment differs from the original Hashem et al. experiment due to the u value being decreased from 0.09 to 0.07.
 
 ![A 5x5 run of experiment 1 that survives](images/exp1_5x5_success.png)
 
-Figure 3: An example of experiment 1 where a 5x5 block of cooperators survives and dominates the system.
+Figure 3:
 
 ![A 5x5 run of experiment 1 that dies](images/exp1_5x5_failure.png)
 
-Figure 4: An example of experiment 1 where a 5x5 block of cooperators dies off.
+Figure 4: 
 
 #### Results of Experiment 1
 Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand.  In order to test our model's similarity, we test multiple times at a 5x5 grid, and find that the cooperators might survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks reliably die out, and 6x6 cooperator blocks reliably survive.
@@ -139,9 +138,9 @@ This is probably because of how the tit-for-tat players choose their actions.  T
 
 
 ## Interpretation
-The goal of this experiment was to investigate how cooperation can emerge.  There are two core insights: first, that clusters of cooperators can survive and expand in an environment of defectors, but only if they are of a certain size; and second, that "silent cooperators" can form such clusters though genetic hitchhiking.  
+The goal of this experiment was to investigate how cooperation can emerge.  There are two core insights: first, that clusters of cooperators can survive and expand in an environment of defectors, but only if they are of a certain size; and second, that "silent cooperators" can form such clusters though genetic hitchhiking. Before getting into this, we want to make the point that our simulation environment is harsher than the environment that Hashem et al. produced. We needed to lower the punishment for cooperating while needing more cooperators at once in order to obtain qualitatively similar results to the original paper. This suggests that our environment is harsher than theirs.
 
-The first insight can be derived from Experiment 1.  When the starting cluster was 4x4 or smaller, it was always overrun.  When the cluster was 6x6, it always expanded and took over most of the grid.  Experiment 2 showed that even with some random noise, individual cooperators cannot survive for long.
+For insights the experiments provided, the first insight is when the starting cluster was 4x4 or smaller, it was always overrun.  When the cluster was 6x6, it always expanded and took over most of the grid.  Experiment 2 showed that even with some random noise, individual cooperators cannot survive for long.
 
 The second insight can be derived from Experiments 2 and 3.  Where randomly-mutated cooperators failed, silent cooperators sometimes succeeded, their behavior alleles hitchhiking on randomly-high fitness caused by another factor (the general-fitness gene).  The critical feature seems to be simultaneity, since that is the most important difference between silent cooperators and regular cooperators.
 
@@ -176,5 +175,5 @@ I. Hashem, D. Telen, P. Nimmegeers, and J. Van Impe, “The Silent Cooperator: A
 
 ## Where's our work?
 
-Curious in checking out what we did? You can find our repository at https://github.com/aselker/cooperation_emergence/ or use our online Binder notebook. 
+Curious in checking out what we did? You can find our repository at https://github.com/aselker/cooperation_emergence/ or use our online Binder notebook.
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aselker/cooperation_emergence/master?filepath=%2Fcode%2FJupyter%20Notebook.ipynb)

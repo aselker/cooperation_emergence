@@ -18,9 +18,9 @@ kernel = np.array(
     [
         [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
         [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
-        [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
-        [1 / 3, 1 / 2, 1, 0, 1, 1 / 2, 1 / 3],
-        [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
+        [1 / 3, 1 / 2, 1,     1,     1,     1 / 2, 1 / 3],
+        [1 / 3, 1 / 2, 1,     0,     1,     1 / 2, 1 / 3],
+        [1 / 3, 1 / 2, 1,     1,     1,     1 / 2, 1 / 3],
         [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
         [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
     ]
@@ -321,7 +321,7 @@ class Agent:
         if silent_coop:
             if np.random.random() < self.silent_coop_chance:
                 self.silent_coop = True
-                self.time_to_cooperate = int(np.random.exponential(200))
+                self.time_to_cooperate = int(np.random.exponential(400))
                 self.strategy = Strategy.s
                 # print(self.time_to_cooperate)
             else:
@@ -381,6 +381,12 @@ if __name__ == "__main__":
     # mutate_rate=mutate_rate,
     # silent_coop=False,
     # )
+    # mutate_rate = 1e-4
+    # num = 1
+    # Experiment 1:
+    # mutate_rate = 0
+    # num = 5000
+    # world = BasicWorld(n=50, bounds=[17,17,25,25], mutate_rate=mutate_rate, silent_coop=False)
 
     # Experiment 2:
     # mutate_rate = 1e-4
