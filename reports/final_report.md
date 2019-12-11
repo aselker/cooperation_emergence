@@ -136,9 +136,9 @@ For insights the experiments provided, the first insight is when the starting cl
 
 The second insight can be derived from Experiments 2 and 3.  Where randomly-mutated cooperators failed, silent cooperators sometimes succeeded, their behavior alleles hitchhiking on randomly-high fitness caused by another factor (the general-fitness gene).  The critical feature seems to be simultaneity, since that is the most important difference between silent cooperators and regular cooperators.
 
-The third insight can be derived from experiment 4. This [proves/disproves] the fact that our smaller experiments with mutation rates of 1e-2 and time steps of 10,000 were valid simplification of the original experiments.
+The third insight can be derived from experiment 3. This [proves/disproves] the fact that our smaller experiments with mutation rates of 1e-2 and time steps of 10,000 were valid simplification of the original experiments.
 
-The final insights come from Experiment 5. In it, we determined that simplified strategies that look over the majority of neighbors  need to be seriously revised if used in this environment due to the overwhelming number of defectors that exist at the start of the simulation.
+The final insights come from Experiment 4. In it, we determined that simplified strategies that look over the majority of neighbors  need to be seriously revised if used in this environment due to the overwhelming number of defectors that exist at the start of the simulation.
 
 ## Future Work
 The agents considered thus far have only relatively simple strategies.  A broader array of strategies could be implemented, including:
