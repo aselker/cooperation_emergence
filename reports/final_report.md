@@ -33,6 +33,7 @@ The constant u was set to 0.09 in the original work of Hashem etal., but was tes
 Figure 2: Cells play the PD against every other cell within 3 spaces, with varying weights.
 
 ![](images/kernel_heatmap.png)
+
 Figure 3: The PD weights, represented as a heatmap.
 
 Each cell cooperates or defects according to its genome.  There are three "behavior" alleles: Cooperate (C), which always cooperates; Defect (D), which always defects; and Silent (S), which defects for a time and then begins to cooperate.  The "timer" that controls the transition is initialized (exponentially distributed, with a mean of 200 steps) when a cell mutates into the S strategy, and is passed on if it replicates.
@@ -44,82 +45,88 @@ Replication is controlled by fitness.  During each timestep, each cell plays the
 ### Experiment 1: Basic System replication
 The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors. Our experiment differs from the original Hashem et al. experiment due to the u value being decreased from 0.09 to 0.07.
 
-![A 5x5 run of experiment 1 that survives](images/exp1_5x5_success.png)
 
-Figure 3:
-
-![A 5x5 run of experiment 1 that dies](images/exp1_5x5_failure.png)
-
-Figure 4:
 
 #### Results of Experiment 1
-Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand.  In order to test our model's similarity, we test multiple times at a 5x5 grid, and find that the cooperators might survive or die out, depending on luck. Two sample runs can be seen below. 4x4 cooperator blocks reliably die out, and 6x6 cooperator blocks reliably survive.
+Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand.  In order to test our model's similarity, we tested multiple times at a 5x5 grid, and find that the cooperators survive and propogate in a pattern qualitatively similar to the patterns found in Hashem et al., where cooperators occupy the majority of the biofilm with bands of defectors existing. The development of this can be seen in Figures 4-8. The count of cooperators over time can be seen in Figure 9.
 
-The results of our first experiment show that, while the system is not totally deterministic, groups of cooperators do seem to expand if they reach a critical size of around 5x5.  In contrast to Hashem et al., 5x5 clusters seem unstable; the other results are consistent with their findings.
+![](images/exp1/5x5/t0.png)
+
+Figure 4: An image of the starting state of a 5x5 block of cooperators in experiment 1.
+
+![](images/exp1/5x5/t1000.png)
+
+Figure 5: An image of the state of a 5x5 block of cooperators after 1001 timesteps.
+
+![](images/exp1/5x5/t5000.png)
+
+Figure 6: An image of the state of a 5x5 block of cooperators after 5001 timesteps.
+
+![](images/exp1/5x5/t10000.png)
+
+Figure 7: An image of the state of a 5x5 block of cooperators after 10001 timesteps.
+
+![](images/exp1/5x5/t19999.png)
+
+Figure 8: An image of the state of a 5x5 block of cooperators after 20000 timesteps, at the end of the experiment.
+
+![](images/exp1/5x5/agents_over_time.png)
+
+Figure 9: A graph of the number of each type of agent over time.
 
 
-<!-- The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors.
+We also tested a 3x3 starting group of cooperating cells, and saw that within 500 timesteps they died out, as seen in Figures 10 and 11. This corroborates Hashem et al, and suggests that our environment is a reasonable approximation as the behavior that we are observing is qualitatively close to what they observed.
 
-We ran these simulations for only 20,000 steps each, rather than the 100,000 steps used by Hashem and in our other experiments, because they all reach equilibria within that time.
+![](images/exp1/3x3/t0.png)
 
-#### Results of Experiment 1
-Hashem et al. found that when the square of cooperators is smaller than 6x6, it tends to be taken over by defectors; when it is 6x6 or larger, it tends to expand.  We found that in our model, with u=0.09 as in Hashem et al., almost any size of group eventually collapsed.  After reducing u to 0.07, we replicated their finding that 6x6 groups tend to expand.  In our model, this extends down to 4x4 groups.  3x3 groups reliably collapse. -->
+Figure 10: An image of the starting state of a 3x3 block of cooperators in experiment 1.
 
+![](images/exp1/3x3/t500.png)
+
+Figure 11: An image of the starting state of a 3x3 block of cooperators after 500 timesteps.
 
 
 ### Experiment 2: Mutation
-Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; all cells become regular cooperators when mutating. We use a mutation rate of 1e-4 as in the original paper for results published, but also ran tests at 1e-2 and 1e-3.  Because of limited computational resources, we only ran the simulations for 10,000 steps, rather than the 100,000 steps used in the original paper.
+Once we have established that a sufficiently-sized cluster of cooperators will spread across the biofilm, we investigate how these clusters can arise.  In our second experiment, we remove the starting cluster of cooperators, and add a chance of mutation.  Mutations can happen to the general fitness gene, the behavior gene, or both, as specified in the Overview.  The silent-cooperator allele is disabled; all cells become regular cooperators when mutating. We use a mutation rate of 1e-4 as in the original paper for results published. We also ran the test for 100,000 time steps, as in the original paper.
 
 #### Results of Experiment 2
-We expect the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading.  This is in fact what we observe.  It is consistent with Hashem et al.'s findings. We also confirmed these results for mutation rates of 1e-2 and 1e-3. Below is a few snapshots of the world during its development.
+We expected the grid to be stably full of defectors, with a few cooperators occurring randomly but never spreading, and this is what we observe.  It is consistent with Hashem et al.'s findings. We also confirmed these results for mutation rates of 1e-2 and 1e-3. Below is a few snapshots of the world during its development.
 
-![](images/exp2_t0.png)  
+![](images/exp2/t0.png)  
 
-Figure 5: The starting state of the world.
+Figure 12: The starting state of the world in experiment 2 (only defectors).
 
-![](images/exp2_t2001.png)  
+![](images/exp2/t50000.png)  
 
-Figure 6: The state of the world after 2001 steps. Cooperators are beginning to appear.
+Figure 13: The starting state of the world on step 50001.
 
-![](images/exp2_t8001.png)  
+![](images/exp2/t100000.png)  
 
-Figure 7: The state of the world after 8001 steps. Defectors still dominate.
+Figure 14: The ending state of the world on step 100000.
 
-![](images/exp2_t10000.png)
+![](images/exp2/agents_over_time.png)  
 
-Figure 8: The state of the world after 10000 steps. As at step 8001, there are no cooperators alive.
-
-![](images/exp2_cells_over_time.png)
-
-Figure 9: The state of the world over time. The world is dominated by defectors, with cooperators providing only a bit of noise.
+Figure 15: The number of cooperator and defector cells over time.
 
 ### Experiment 3: Add silent-cooperator state
-The third experiment involves adding a silent-cooperator allele that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become "activate," resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, resulting in clusters suddenly forming later on that are above the critical threshold for cooperator success. Within the experiment, the amount of time before activation was exponentially distributed with a mean of 200 time steps. A sample run of the experiment can be seen in the below sampling of images at steps 1, 1001, 3001, and 10000.
+The third experiment involves adding a silent-cooperator allele that means that a cell will become a cooperator after a certain number of timesteps. This means that the model will be run for a number of generations before the genes become "activate," resulting in sleeper agents that will awaken and begin being cooperative. Those with the gene will pass it on to other cells if they are successfully dominant early-on, with the hypothesized result of clusters of cooperators suddenly appearing later on that are above the critical threshold for cooperator success. Within the experiment, the amount of time before activation was exponentially distributed with a mean of 200 time steps. We still ran with a u of 0.07, unlike Hashem et al.'s value of 0.09.
 
-![](images/exp3_t0.png)  
-Figure 10: The starting state of the world.
-
-![](images/exp3_t1001.png)  
-Figure 11: The state of the world after 1001 steps. Cooperators are beginning to appear.
-
-![](images/exp3_t3001.png)  
-Figure 12: The state of the world after 3001 steps. Cooperators are beginning to control a majority of the world.
-
-![](images/exp3_t10000.png)  
-Figure 13: The state of the world after 10000 steps. Cooperators control a solid majority of the world and are slowly eliminating defectors.
 
 
 #### Results of Experiment 3
-Experiment 3 proves that cooperation can appear in a population of defectors if there is a trigger of some kind that causes a large body of cells to suddenly become cooperators. This aligns with what the original experiment was hoping to predict, but we had to make a small change of a higher mutation rate in order to achieve these results. Due in part to compute power and in part due to time limitations, we had to run experiments for 10,000 timesteps instead of 100,000 timesteps as in the original paper. Therefore, we had to increase the mutation rate and found that we need to increase it to 1e-2 from 1e-4. Further steps include trying to determine if a mutation rate of 1e-4 will work on the timeframe that Hashem et al. used. The number of each type of agent over time is plotted in the below graph.
+Experiment 3 found a few interesting results. To begin with, although our experiment had the same setup of Hashem et al., we were unable to replicate their success of having silent cooperators successfully dominate the biofilm. The number of each type of agent over time can be seen in Figure 16, which shows how although cooperators occasionally dominated for short time periods, they were unable to maintain that dominance. We are uncertain about where this difference derives from.
 
-![](images/exp3_final_graph.png)  
-Figure 14: The state of the world over time. Original "cooperators" do not exist.
+![](images/exp3/agents_over_time.png)  
+
+Figure 14: The number of each kind of agent over time for experiment 3.
+
+
 
 
 ### Experiment 4: Simplified Tit for Tat Strategy
-The strategies that cells follow in previous experiments are relatively simple, either exclusively cooperating, defecting, or waiting until a certain time step to cooperate. Although computational limitations were still in place, an exploration of a more complex strategy was in order. One common strategy that is successful in Prisoner's Dilemma tournaments is the tit-for-tat strategy, which takes the same action that its opponent took in the last round. In this simulation, the PD is played against multiple opponents at the same time, so we used a weighted average of opponents' actions (weighted by the same grid used in the PD payouts; see Fig. 2).  If more than 40% of opponents defected, the cell would defect.  Otherwise, it could cooperate.
+The strategies that cells follow in previous experiments are relatively simple, either exclusively cooperating, defecting, or waiting until a certain time step to cooperate. One common strategy that is successful in Prisoner's Dilemma tournaments is the tit-for-tat strategy, which takes the same action that its opponent took in the last round. In this simulation, the PD is played against multiple opponents at the same time, so we used a weighted average of opponents' actions (weighted by the same grid used in the PD payouts; see Fig. 2).  If more than 40% of opponents cooperated, the cell would cooperate.  Otherwise, it would defect.
 
-As in Experiment 1, this experiment started with a 6x6 block of tit-for-tat players, with the rest of the grid full of defectors.  We ran this simulation for 20,000 steps.
+This experiment started with a 6x6 block of tit-for-tat players, with the rest of the grid full of defectors.  We ran this simulation for 12,000, reduced from prior experiments' 100k steps due to a larger computation requirement.
 
 #### Results of Experiment 4
 The tit-for-tat players did not survive or propagate.
