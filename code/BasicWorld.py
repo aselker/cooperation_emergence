@@ -34,7 +34,7 @@ C/D: -u
 C/C: 1-u
 """
 
-u = 0.09
+u = 0.07
 total_interactions = np.sum(kernel)
 kernel[3][3] = -u * total_interactions
 
@@ -372,15 +372,15 @@ if __name__ == "__main__":
         os.mkdir(jsons_dir)
 
     # Experiment 1:
-    # mutate_rate = 0
-    # num = 10000
-    # world = BasicWorld(
-    # n=50,
-    # bounds=[17, 17, 28, 28],
-    # box_is_tft=False,
-    # mutate_rate=mutate_rate,
-    # silent_coop=False,
-    # )
+    mutate_rate = 0
+    num = 10000
+    world = BasicWorld(
+        n=50,
+        bounds=[17, 17, 23, 23],
+        box_is_tft=False,
+        mutate_rate=mutate_rate,
+        silent_coop=False,
+    )
 
     # Experiment 2:
     # mutate_rate = 1e-4
@@ -388,9 +388,9 @@ if __name__ == "__main__":
     # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
 
     # Experiment 4:
-    mutate_rate = 5e-3
-    num = 10000
-    world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
+    # mutate_rate = 1e-3
+    # num = 10000
+    # world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
 
     # Experiment 5:
     # mutate_rate = 0
