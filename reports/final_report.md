@@ -6,9 +6,9 @@ Cooperation in a species seems counterintuitive to the idea of "survival of the 
 
 
 ## Overview
-In this experiment, we built a computational model that represents a biofilm.  Each cell in a two-dimensional grid represents a cell, which has a simple genome, and can mutate, replicate into other spaces (killing those cells' previous occupants), or be killed when another cell replicates into its space.
+In this experiment, we built a computational model that represents a biofilm.  Each cell in a two-dimensional grid represents a cell with a simple genome.  Each cell can mutate, replicate into other spaces (killing those cells' previous occupants), or be killed when another cell replicates into its space.
 
-Replication is controlled by fitness, which is driven by two factors.  First, each cell has a general fitness gene, which is intended to represent the effects of all of the cell's genes which are not represented in this model.  The general fitness gene is initialized with a value of 0, meaning "no effect"; in some simulations, it is randomly incremented to represent helpful mutations.
+Replication is controlled by fitness, which is driven by two factors.  First, each cell has a general fitness gene, which is intended to represent all the genes not included in this model.  The general fitness gene is initialized with a value of 0, i.e. having no effect; in some simulations, it is randomly incremented to represent helpful mutations.
 
 The second factor is the Prisoner's Dilemma (PD) games which the cells play against each other.  Each cell can "cooperate" or "defect" with other cells; both cells' actions affect the fitness scores of both.  Cooperating decreases the cooperator's fitness, but increases the fitness of the other cells by a greater amount; defecting is a net loss of fitness, but helps the defector.  The payoff matrix for cell A playing against cell B is shown in figure N.
 
@@ -19,7 +19,7 @@ The second factor is the Prisoner's Dilemma (PD) games which the cells play agai
 
 Figure 1: Prisoner's Dilemma payoff matrix for A
 
-The constant u was set to 0.09 in the original work of Hashem etal., but was tested with multiple different values during our experimentation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in Fig. 2 and Fig. 3.
+The constant u was set to 0.09 in the original work of Hashem et al., but was tested with multiple different values during our experimentation.  The PD is played against every cell within 3 spaces, with payoffs decreasing as distance increases.  The grid of weights is shown in Fig. 2 and Fig. 3.
 
 ```
 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3
@@ -43,7 +43,7 @@ Replication is controlled by fitness.  During each timestep, each cell plays the
 
 ## Experiments
 ### Experiment 1: Basic System replication
-The first step of the experiment is to prove that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors. Our experiment differs from the original Hashem et al. experiment due to the u value being decreased from 0.09 to 0.07.
+The first step of the experiment is to show that if a cluster of cooperators exists, it can expand and dominate the biofilm.  To test this, we simulate a biofilm without mutation.  A square of varying size in the center of the film is initialized with cooperators, and the rest of the film is filled with defectors. Our experiment differs from the original Hashem et al. experiment due to the u value being decreased from 0.09 to 0.07.
 
 
 
@@ -52,27 +52,27 @@ Hashem et al. found that when the square of cooperators is smaller than 6x6, it 
 
 ![](images/exp1/5x5/t0.png)
 
-Figure 4: An image of the starting state of a 5x5 block of cooperators in experiment 1.
+Figure 4: The starting state of a 5x5 block of cooperators in experiment 1.
 
 ![](images/exp1/5x5/t1000.png)
 
-Figure 5: An image of the state of a 5x5 block of cooperators after 1001 timesteps.
+Figure 5: The state of a 5x5 block of cooperators after 1001 timesteps.
 
 ![](images/exp1/5x5/t5000.png)
 
-Figure 6: An image of the state of a 5x5 block of cooperators after 5001 timesteps.
+Figure 6: The state of a 5x5 block of cooperators after 5001 timesteps.
 
 ![](images/exp1/5x5/t10000.png)
 
-Figure 7: An image of the state of a 5x5 block of cooperators after 10001 timesteps.
+Figure 7: The state of a 5x5 block of cooperators after 10001 timesteps.
 
 ![](images/exp1/5x5/t19999.png)
 
-Figure 8: An image of the state of a 5x5 block of cooperators after 20000 timesteps, at the end of the experiment.
+Figure 8: The state of a 5x5 block of cooperators after 20000 timesteps, at the end of the experiment.
 
 ![](images/exp1/5x5/agents_over_time.png)
 
-Figure 9: A graph of the number of each type of agent over time.
+Figure 9: The number of each type of agent over time.
 
 
 We also tested a 3x3 starting group of cooperating cells, and saw that within 500 timesteps they died out, as seen in Figures 10 and 11. This corroborates Hashem et al, and suggests that our environment is a reasonable approximation as the behavior that we are observing is qualitatively close to what they observed.
@@ -121,33 +121,32 @@ Experiment 3 found a few interesting results. To begin with, although our experi
 Figure 16: The number of each kind of agent over time for experiment 3.
 
 
-
-
 ### Experiment 4: Simplified Tit for Tat Strategy
 The strategies that cells follow in previous experiments are relatively simple, either exclusively cooperating, defecting, or waiting until a certain time step to cooperate. One common strategy that is successful in Prisoner's Dilemma tournaments is the tit-for-tat strategy, which takes the same action that its opponent took in the last round. In this simulation, the PD is played against multiple opponents at the same time, so we used a weighted average of opponents' actions (weighted by the same grid used in the PD payouts; see Fig. 2).  If more than 40% of opponents cooperated, the cell would cooperate.  Otherwise, it would defect.
 
 This experiment started with a 6x6 block of tit-for-tat players, with the rest of the grid full of defectors.  We ran this simulation for 10,000, reduced from prior experiments' 100,000 steps due to a larger computation requirement.
 
 #### Results of Experiment 4
-The tit-for-tat players' growth was unlike anything we observed prior or that Hashem et al. observed. As seen in Figure 17, the number of Tit-for-Tat following cells mostly plateaus for around 3,000 timesteps, only gradually increasing. However, around step 3000, the population begins to grow more quickly.  After this point, the growth resembles that in Experiment 1.
-
-![](images/exp4/6x6/agents_over_time.png)  
-Figure 18: The state of the world over time.
+The tit-for-tat players' growth was unlike anything we observed prior or that Hashem et al. observed. As seen in Figure 22, the number of Tit-for-Tat following cells mostly plateaus for around 3,000 timesteps, only gradually increasing. However, around step 3000, the population begins to grow more quickly.  After this point, the growth resembles that in Experiment 1.
 
 ![](images/exp4/6x6/t0.png)  
-Figure 19: The starting state of the world.
+Figure 17: The starting state of the world.
 
 ![](images/exp4/6x6/t1000.png)  
-Figure 20: By 1000 steps, the tit-for-tat players are beginning to expand.
+Figure 18: By 1000 steps, the tit-for-tat players are beginning to expand.
 
 ![](images/exp4/6x6/t2500.png)  
-Figure 21: At 2500 steps, the tit-for-tat players are still growing slowly.
+Figure 19: At 2500 steps, the tit-for-tat players are still growing slowly.
 
 ![](images/exp4/6x6/t3000.png)  
-Figure 22: At 3000 steps, the group suddenly begins to grow quickly.
+Figure 20: At 3000 steps, the group suddenly begins to grow quickly.
 
 ![](images/exp4/6x6/t4500.png)  
-Figure 23: By 4500 steps, the grid is mostly tit-for-tat players.
+Figure 21: By 4500 steps, the grid is mostly tit-for-tat players.
+
+![](images/exp4/6x6/agents_over_time.png)  
+Figure 22: The state of the world over time.
+
 
 The slow growth near the beginning is probably because of how the tit-for-tat players choose their actions.  At the beginning, they all defect.  The cells on the corners of the block are exposed to more defectors than fellow tit-for-tat players; regardless of the other tit-for-tat cells' actions, those cells will feel more defection than cooperation, and will therefore begin to defect.  This will "spread" inward until all of the cells are defecting, leaving the tit-for-tat players as nothing but ordinary defectors.
 
