@@ -391,14 +391,14 @@ if __name__ == "__main__":
     world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=False)
     """
 
-    # Experiment 4:
+    # Experiment 3:
     """
     mutate_rate = 1e-3
     num = 10000
     world = BasicWorld(n=50, mutate_rate=mutate_rate, silent_coop=True)
     """
 
-    # Experiment 5:
+    # Experiment 4:
     mutate_rate = 0
     num = 10000
     world = BasicWorld(

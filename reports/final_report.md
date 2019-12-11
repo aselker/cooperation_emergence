@@ -118,7 +118,7 @@ Experiment 3 found a few interesting results. To begin with, although our experi
 
 ![](images/exp3/agents_over_time.png)  
 
-Figure 14: The number of each kind of agent over time for experiment 3.
+Figure 16: The number of each kind of agent over time for experiment 3.
 
 
 
@@ -129,41 +129,44 @@ The strategies that cells follow in previous experiments are relatively simple, 
 This experiment started with a 6x6 block of tit-for-tat players, with the rest of the grid full of defectors.  We ran this simulation for 12,000, reduced from prior experiments' 100k steps due to a larger computation requirement.
 
 #### Results of Experiment 4
-The tit-for-tat players did not survive or propagate.
+The tit-for-tat players' growth was unlike anything we observed prior or that Hashem et al. observed. As seen in Figure 17, the number of Tit-for-Tat following cells mostly plateaus for around 8,000 timesteps, only gradually increasing. However, around step 8500 a sudden explosion of growth in the population is observed.
 
-![](images/exp5/t1.png)  
-Figure 15: The starting state of the world.
+![](images/exp5/5x5/agents_over_time.png)
 
-![](images/exp5/t1001.png)  
-Figure 16: By 1000 steps, the tit-for-tat players are beginning to expand.
+Figure 18: The state of the world over the course of the experiment.
 
-![](images/exp5/t4001.png)  
-Figure 17: At 4000 steps, the tit-for-tat players are still growing slowly.
+In order to discover the root of this, it is possible to look at the state of the biofilm at different timesteps. At time 0 (Figure 19), the biofilm looks as is expected, and it slowly expands until time step 8000 (Figure 20). Starting sometime between time step 8000 and 8500, the tit-for-tat cells are able to start expanding more rapidly, quickly growing in the next thousand steps (Figures 21 and 22). After 12,000 steps, the simulation is in a similar situation as Experiment 1, suggesting a similar stead-state is being reached (Figure 23).
 
-![](images/exp5/t5001.png)  
-Figure 17: At 5000 steps, the group suddenly begins to grow quickly.
+![](images/exp5/5x5/t0.png)
 
-![](images/exp5/t6001.png)  
-Figure 17: By 6000 steps, the grid is mostly tit-for-tat players.
+Figure 19: The state of the world at the start of experiment 4.
 
-![](images/exp5/cells_over_time.png)  
-Figure 18: The state of the world over time.  Note the sharp jump around 5000 steps.
+![](images/exp5/5x5/t8000.png)
 
-This is probably because of how the tit-for-tat players choose their actions.  At the beginning, they all defect.  The cells on the corners of the block are exposed to more defectors than fellow tit-for-tat players; regardless of the other tit-for-tat cells' actions, those cells will feel more defection than cooperation, and will therefore begin to defect.  This will "spread" inward until all of the cells are defecting, leaving the tit-for-tat players as nothing but ordinary defectors.
+Figure 20: The state of the world at step 8001.
 
-Eventually, they begin to cooperate.  We are unsure of the trigger for this; regardless, around turn
+![](images/exp5/5x5/t8500.png)
+
+Figure 21: The state of the world at step 8501.
+
+![](images/exp5/5x5/t9000.png)
+
+Figure 22: The state of the world at step 9001.
+
+![](images/exp5/5x5/t11999.png)
+
+Figure 23: The state of the world at step 12000.
 
 
 ## Interpretation
-The goal of this experiment was to investigate how cooperation can emerge.  There are two core insights: first, that clusters of cooperators can survive and expand in an environment of defectors, but only if they are of a certain size; and second, that "silent cooperators" can form such clusters though genetic hitchhiking. Before getting into this, we want to make the point that our simulation environment is harsher than the environment that Hashem et al. produced. We needed to lower the punishment for cooperating while needing more cooperators at once in order to obtain qualitatively similar results to the original paper. This suggests that our environment is harsher than theirs.
+The goal of this experiment was to investigate how cooperation can emerge.  There are two core insights: first, that clusters of cooperators can survive and expand in an environment of defectors, but only if they are of a certain size; and second, that "silent cooperators" can form such clusters though genetic hitchhiking. Before getting into this, we want to make the point that our simulation environment is harsher than the environment that Hashem et al. produced. We needed to lower the punishment for cooperating in order to obtain results similar to the original paper, and although we needed fewer cells to replicate their results it was not by a large margin.
 
-For insights the experiments provided, the first insight is when the starting cluster was 4x4 or smaller, it was always overrun.  When the cluster was 6x6, it always expanded and took over most of the grid.  Experiment 2 showed that even with some random noise, individual cooperators cannot survive for long.
+The first experiment provided the insight that once exceeding a critical mass, cooperators are able to dominate a biofilm. This insight is critical for proving that cooperation can help a species overall and is beneficial to evolve. The first experiment also gave some insight as to the size of block needed for this to happen, which appears to be about 5x5 cells. Experiment 2 backed this up by showing that individual cooperators cannot survive.
 
-The second insight can be derived from Experiments 2 and 3.  Where randomly-mutated cooperators failed, silent cooperators sometimes succeeded, their behavior alleles hitchhiking on randomly-high fitness caused by another factor (the general-fitness gene).  The critical feature seems to be simultaneity, since that is the most important difference between silent cooperators and regular cooperators.
+The second insight can be derived from Experiments 2 and 3. Where randomly-mutated cooperators failed, silent cooperators sometimes succeeded, their behavior alleles hitchhiking on randomly-high fitness caused by another factor (the general-fitness gene).  The critical feature seems to be simultaneity, since that is the most important difference between silent cooperators and regular cooperators. Although the silent cooperators were unable to maintain sustained control of the biofilm, the experiment suggests that under different circumstances they could, which Hashem et al. support.
 
-The third insight can be derived from experiment 3. This [proves/disproves] the fact that our smaller experiments with mutation rates of 1e-2 and time steps of 10,000 were valid simplification of the original experiments.
 
-The final insights come from Experiment 4. In it, we determined that simplified strategies that look over the majority of neighbors  need to be seriously revised if used in this environment due to the overwhelming number of defectors that exist at the start of the simulation.
+INSIGHTS FROM EXPERIMENT 4
 
 ## Future Work
 The agents considered thus far have only relatively simple strategies.  A broader array of strategies could be implemented, including:
