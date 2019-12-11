@@ -18,9 +18,9 @@ kernel = np.array(
     [
         [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
         [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
-        [1 / 3, 1 / 2, 1,     1,     1,     1 / 2, 1 / 3],
-        [1 / 3, 1 / 2, 1,     0,     1,     1 / 2, 1 / 3],
-        [1 / 3, 1 / 2, 1,     1,     1,     1 / 2, 1 / 3],
+        [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
+        [1 / 3, 1 / 2, 1, 0, 1, 1 / 2, 1 / 3],
+        [1 / 3, 1 / 2, 1, 1, 1, 1 / 2, 1 / 3],
         [1 / 3, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 2, 1 / 3],
         [1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3, 1 / 3],
     ]
@@ -372,22 +372,22 @@ if __name__ == "__main__":
         os.mkdir(jsons_dir)
 
     # Experiment 1:
-    # mutate_rate = 0
-    # num = 10000
-    # world = BasicWorld(
-    # n=50,
-    # bounds=[17, 17, 28, 28],
-    # box_is_tft=False,
-    # mutate_rate=mutate_rate,
-    # silent_coop=False,
-    # )
+    mutate_rate = 0
+    num = 20000
+    world = BasicWorld(
+        n=50,
+        bounds=[17, 17, 22, 22],
+        box_is_tft=False,
+        mutate_rate=mutate_rate,
+        silent_coop=False,
+    )
     # mutate_rate = 1e-4
     # num = 1
     # Experiment 1:
     # mutate_rate = 0
     # num = 5000
     # world = BasicWorld(n=50, bounds=[17,17,25,25], mutate_rate=mutate_rate, silent_coop=False)
-	
+
     # mutate_rate = 0
     # num = 10000
     # world = BasicWorld(
@@ -411,11 +411,13 @@ if __name__ == "__main__":
     # Experiment 5:
     """
     mutate_rate = 0
-    num = 10000
+    num = 12000
     world = BasicWorld(
         n=50, box_is_tft=True, bounds=(17, 17, 23, 23), silent_coop=False
     )
     """
+
+    plt.figure(figsize=(12, 8))
 
     stats = {"time": [], "num_c": [], "num_d": [], "num_s": [], "num_t": []}
     for x in range(num):
@@ -426,15 +428,15 @@ if __name__ == "__main__":
             else:
                 stats[key].append(value)
 
-        if x % 1000 == 0:
+        if x % 500 == 0:
             # if False:
             world.draw()
-            plt.savefig(os.path.join(pics_dir, f"t{x}.png"))
+            plt.savefig(os.path.join(pics_dir, f"t{x}.png"), dpi=300)
             plt.clf()
             print(x / num * 100)
 
     world.draw()
-    plt.savefig(os.path.join(pics_dir, f"t{x}.png"))
+    plt.savefig(os.path.join(pics_dir, f"t{x}.png"), dpi=300)
     plt.clf()
 
     if max(stats["num_c"]) > 0:
@@ -449,7 +451,7 @@ if __name__ == "__main__":
     plt.xlabel("Time (steps)")
     plt.ylabel("Number of agents")
     plt.legend()
-    plt.savefig(os.path.join(pics_dir, "agents_over_time.png"))
+    plt.savefig(os.path.join(pics_dir, "agents_over_time.png"), dpi=300)
 
     jsons = "jsons/"
     file = f'{num}_timesteps_on_{datetime.datetime.now().strftime("%B %d %Y at %I:%M:%S%p")}.json'
